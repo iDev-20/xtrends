@@ -203,7 +203,7 @@ class CustomSearchTextFormField extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
-          // hintText: hintText ?? AppStrings.searchForAnything,
+          hintText: hintText ?? AppStrings.searchHintText,
           hintStyle: const TextStyle(
             color: AppColors.grey200,
             fontSize: 14,
@@ -216,7 +216,7 @@ class CustomSearchTextFormField extends StatelessWidget {
               const BoxConstraints(maxHeight: 36, maxWidth: 36),
           prefixIcon: Padding(
             padding: const EdgeInsets.all(10),
-            // child: AppImages.svgSearchIcon,
+            child: AppImages.svgSearchIcon,
           ),
         ),
         inputFormatters: inputFormatters,

@@ -35,17 +35,19 @@ class CustomAppButton extends StatelessWidget {
           overlayColor ?? AppColors.backgroundGrey.withOpacity(0.2)),
       padding: MaterialStateProperty.all(
         contentPadding ??
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14.5),
       ),
       textStyle: MaterialStateProperty.all(
         const TextStyle(
             color: AppColors.white,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Raleway'),
+            fontFamily: 'PlusJakartaSans',
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            height: 1.5),
       ),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           side: BorderSide(
             color: borderColor,
           ),

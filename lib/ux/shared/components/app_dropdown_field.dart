@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
-import 'package:xtrends/ux/shared/resources/app_images.dart';
 
 class CustomAppDropDownField extends StatelessWidget {
   const CustomAppDropDownField(
@@ -52,9 +51,10 @@ class CustomAppDropDownField extends StatelessWidget {
           isExpanded: true,
           validator: validator,
           value: valueHolder,
-          // icon: AppImages.svgDropdDownIcon,
+          icon: const Icon(Icons.keyboard_arrow_down_rounded,
+              color: AppColors.darkBlue),
           style: const TextStyle(
-              fontFamily: 'Raleway',
+              fontFamily: 'PlusJakartaSans',
               color: AppColors.black,
               overflow: TextOverflow.ellipsis),
           decoration: InputDecoration(

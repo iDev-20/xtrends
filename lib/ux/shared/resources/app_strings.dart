@@ -3,6 +3,7 @@ class AppStrings {
 
   static const appName = 'XTrends';
   static const developedByMe = 'Developed by ID';
+  static const searchHintText = 'Search country or city';
 
   //Onboarding
   static const discoverWhatsTrendingAnywhere =
