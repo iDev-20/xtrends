@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xtrends/platform/shared_pref.dart';
+import 'package:xtrends/ux/services/shared_pref.dart';
 import 'package:xtrends/ux/navigation/navigation.dart';
 import 'package:xtrends/ux/navigation/navigation_host_page.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     bool isFirstTime = await SharedPref.isFirstTime();
-    
+
     if (mounted) {
       if (isFirstTime) {
         Navigation.navigateToScreenAndClearOnePrevious(
