@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xtrends/ux/navigation/navigation.dart';
 import 'package:xtrends/ux/shared/components/app_material.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
+import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
 import 'package:xtrends/ux/views/trends/trend_details_screen.dart';
 
 class HomeTrendingWidget extends StatelessWidget {
@@ -12,6 +14,8 @@ class HomeTrendingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<HomeViewModel>();
+    final location = viewModel.currentLocation ?? '';
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -20,11 +24,11 @@ class HomeTrendingWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(16),
+          Padding(
+            padding: const EdgeInsets.all(16),
             child: Text(
-              AppStrings.trendingInUS,
-              style: TextStyle(
+              '${AppStrings.trendingIn} $location',
+              style: const TextStyle(
                   color: AppColors.darkBlue,
                   fontSize: 18,
                   fontWeight: FontWeight.bold),

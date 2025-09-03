@@ -11,16 +11,36 @@ class HomeViewModel extends ChangeNotifier {
   String get firstName => pref.getString(AppConstants.firstNameKey) ?? '';
 
   String? _currentLocation;
+  bool _loadingLocation = false;
 
   String? get currentLocation => _currentLocation;
+  bool get isLoadingLocation => _loadingLocation;
 
   Future<void> loadLocation() async {
-    _currentLocation = pref.get(AppConstants.locationKey) as String?;
+    if (_currentLocation != null) return;
 
-    final country = await LocationService().getCountryName();
-    _currentLocation = country;
+    _loadingLocation = true;
+    notifyListeners();
 
-    await pref.setString(AppConstants.locationKey, country ?? '');
+    try {
+      _currentLocation = pref.get(AppConstants.locationKey) as String?;
+
+      final country = await LocationService().getCountryName();
+      if (country != null && country.isNotEmpty) {
+        _currentLocation = country;
+        await pref.setString(AppConstants.locationKey, country);
+      }
+    } catch (e) {
+      debugPrint("Error loading location: $e");
+    } finally {
+      _loadingLocation = false;
+      notifyListeners();
+    }
+  }
+
+  void setLocation(String value) {
+    _currentLocation = value;
+    pref.setString(AppConstants.locationKey, value);
     notifyListeners();
   }
 }

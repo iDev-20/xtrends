@@ -32,7 +32,7 @@ class AppStrings {
   static const sampleAppUser = 'Alex';
   static const selectLocation = 'Select Location';
   static const unitedStates = 'United States';
-  static const trendingInUS = 'Trending in United States';
+  static const trendingIn = 'Trending in';
   static const technology = 'Technology';
   static const futureOfAI = 'FutureOfAI';
 
