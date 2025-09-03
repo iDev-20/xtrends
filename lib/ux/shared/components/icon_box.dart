@@ -3,14 +3,17 @@ import 'package:xtrends/ux/shared/components/app_material.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 
 class IconBox extends StatelessWidget {
-  const IconBox({super.key, required this.icon, this.backgroundColor});
+  const IconBox(
+      {super.key, required this.icon, this.backgroundColor, this.onTap});
 
   final Widget icon;
   final Color? backgroundColor;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return AppMaterial(
+      onTap: onTap,
       child: Ink(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xtrends/ux/shared/components/app_page.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
-import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
 import 'package:xtrends/ux/views/about/about_screen.dart';
 import 'package:xtrends/ux/views/saved_trends/saved_trends_screen.dart';
@@ -46,22 +45,22 @@ class _NavigationHostPageState extends State<NavigationHostPage> {
             currentPage = value;
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
-              icon: AppImages.svgUnselectedHomeIcon,
-              activeIcon: AppImages.svgSelectedHomeIcon,
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home_outlined),
               label: AppStrings.home),
           BottomNavigationBarItem(
-              icon: AppImages.svgUnselectedHomeIcon,
-              activeIcon: AppImages.svgSelectedHomeIcon,
+              icon: Icon(Icons.trending_up_rounded),
+              activeIcon: Icon(Icons.trending_up_rounded),
               label: AppStrings.trends),
           BottomNavigationBarItem(
-              icon: AppImages.svgUnselectedHomeIcon,
-              activeIcon: AppImages.svgSelectedHomeIcon,
+              icon: Icon(Icons.bookmark_border_rounded),
+              activeIcon: Icon(Icons.bookmark_border_rounded),
               label: AppStrings.saved),
           BottomNavigationBarItem(
-              icon: AppImages.svgUnselectedHomeIcon,
-              activeIcon: AppImages.svgSelectedHomeIcon,
+              icon: Icon(Icons.info_outline_rounded),
+              activeIcon: Icon(Icons.info_outline_rounded),
               label: AppStrings.about),
         ],
       ),
