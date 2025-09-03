@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:xtrends/platform/shared_pref.dart';
 import 'package:xtrends/ux/navigation/navigation.dart';
 import 'package:xtrends/ux/navigation/navigation_host_page.dart';
 import 'package:xtrends/ux/shared/components/app_buttons.dart';
@@ -8,6 +10,7 @@ import 'package:xtrends/ux/shared/models/ui_models.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
+import 'package:xtrends/ux/view_models.dart/user_name_view_model.dart';
 
 class WalkThroughScreen extends StatefulWidget {
   const WalkThroughScreen({super.key});
@@ -19,6 +22,7 @@ class WalkThroughScreen extends StatefulWidget {
 class _WalkThroughScreenState extends State<WalkThroughScreen> {
   late PageController _pageController;
   int _currentPage = 0;
+  late UserNameViewModel viewModel;
 
   final Duration _slideAnimationDuration = const Duration(milliseconds: 500);
 
@@ -46,6 +50,7 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 0);
+    viewModel = context.read<UserNameViewModel>();
   }
 
   @override
@@ -130,12 +135,16 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
                         ),
                         const SizedBox(height: 10),
                         if (isLastPage)
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 18),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
                             child: CustomAppTextFormField(
                               hintText: AppStrings.firstName,
                               keyboardType: TextInputType.name,
                               textCapitalization: TextCapitalization.words,
+                              textInputAction: TextInputAction.done,
+                              onChanged: (value) {
+                                viewModel.updateFirstName(value);
+                              },
                             ),
                           ),
                       ],
@@ -151,22 +160,33 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                  child: CustomAppButton(
-                    onTap: () {
-                      //set walkthrough seen
-                      isLastPage
-                          ? Navigation.navigateToScreen(
-                              context: context,
-                              screen: const NavigationHostPage(),
-                            )
-                          : _pageController.nextPage(
+                  child: Consumer<UserNameViewModel>(
+                    builder: (context, vm, _) {
+                      return CustomAppButton(
+                        enabled: enableButton(),
+                        onTap: () async {
+                          if (isLastPage) {
+                            vm.saveFirstNameToCache();
+                            await SharedPref.setOnboardingComplete();
+                            if (mounted) {
+                              Navigation.navigateToScreen(
+                                context: context,
+                                screen: const NavigationHostPage(),
+                              );
+                            }
+                          } else {
+                            _pageController.nextPage(
                               duration: _slideAnimationDuration,
                               curve: Curves.easeIn,
                             );
+                          }
+                        },
+                        foregroundColor: Colors.white,
+                        child: Text(isLastPage
+                            ? AppStrings.continueText
+                            : AppStrings.next),
+                      );
                     },
-                    foregroundColor: Colors.white,
-                    child: Text(
-                        isLastPage ? AppStrings.continueText : AppStrings.next),
                   ),
                 ),
               ],
@@ -175,5 +195,12 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
         ),
       ),
     );
+  }
+
+  bool enableButton() {
+    if (_currentPage == 2) {
+      return viewModel.isButtonEnabled;
+    }
+    return true;
   }
 }

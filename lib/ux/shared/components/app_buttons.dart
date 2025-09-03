@@ -42,8 +42,7 @@ class CustomAppButton extends StatelessWidget {
             color: AppColors.white,
             fontFamily: 'PlusJakartaSans',
             fontSize: 18,
-            fontWeight: FontWeight.w600,
-            height: 1.5),
+            fontWeight: FontWeight.w600),
       ),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
@@ -56,7 +55,7 @@ class CustomAppButton extends StatelessWidget {
       backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
         if (states.contains(MaterialState.disabled)) {
-          return AppColors.grey200;
+          return AppColors.grey;
         }
         return backgroundColor;
       }),

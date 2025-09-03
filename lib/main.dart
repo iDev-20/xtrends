@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
+import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
+import 'package:xtrends/ux/view_models.dart/user_name_view_model.dart';
 import 'package:xtrends/ux/views/splash_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences pref = await SharedPreferences.getInstance();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserNameViewModel()),
+        ChangeNotifierProvider(create: (context) => HomeViewModel(pref: pref)),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

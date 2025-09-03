@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xtrends/ux/shared/components/app_dropdown_field.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
+import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
 
-class HomeGreetingCard extends StatelessWidget {
+class HomeGreetingCard extends StatefulWidget {
   const HomeGreetingCard({super.key});
+
+  @override
+  State<HomeGreetingCard> createState() => _HomeGreetingCardState();
+}
+
+class _HomeGreetingCardState extends State<HomeGreetingCard> {
+  late HomeViewModel viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = context.read<HomeViewModel>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +38,16 @@ class HomeGreetingCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       AppStrings.hello,
                       style: TextStyle(color: AppColors.grey400),
                     ),
                     Text(
-                      '${AppStrings.sampleAppUser}!',
-                      style: TextStyle(
+                      '${viewModel.firstName}!',
+                      style: const TextStyle(
                           color: AppColors.darkBlueText,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
