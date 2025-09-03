@@ -3,6 +3,7 @@ import 'package:xtrends/ux/shared/components/app_page.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
+import 'package:xtrends/ux/views/saved_trends/saved_trends_screen.dart';
 import 'package:xtrends/ux/views/home/components/home_app_bar.dart';
 import 'package:xtrends/ux/views/home/home_screen.dart';
 import 'package:xtrends/ux/views/trends/trends_screen.dart';
@@ -56,7 +57,7 @@ class _NavigationHostPageState extends State<NavigationHostPage> {
           BottomNavigationBarItem(
               icon: AppImages.svgUnselectedHomeIcon,
               activeIcon: AppImages.svgSelectedHomeIcon,
-              label: AppStrings.favorites),
+              label: AppStrings.saved),
           BottomNavigationBarItem(
               icon: AppImages.svgUnselectedHomeIcon,
               activeIcon: AppImages.svgSelectedHomeIcon,
@@ -73,7 +74,7 @@ class _NavigationHostPageState extends State<NavigationHostPage> {
       case 1:
         return const TrendsScreen();
       case 2:
-        return const HomeScreen();
+        return const SavedTrendsScreen();
       case 3:
         return const HomeScreen();
       default:

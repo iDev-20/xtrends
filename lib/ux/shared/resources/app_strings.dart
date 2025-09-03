@@ -24,7 +24,7 @@ class AppStrings {
   //BottomNav
   static const home = 'Home';
   static const trends = 'Trends';
-  static const favorites = 'Favorites';
+  static const saved = 'Saved';
   static const about = 'About';
 
   //Home
@@ -43,10 +43,11 @@ class AppStrings {
   static const copy = 'Copy';
   static const sampleRank = 'Rank 1';
   static const open = 'Open';
+  static const save = 'Save';
 
   //Favorites
   static const techTuesday = 'TechTuesday';
-  static const trendingInSan = 'Trending in San Francisco';
+  static const sampleTrendLocation = 'San Francisco';
 
   //About
   static const whatsTrending = "What's Trending?";

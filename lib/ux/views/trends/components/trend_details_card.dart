@@ -84,13 +84,25 @@ class TrendDetailsCard extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: [
-              const TrendDetailActionButton(
-                  icon: Icon(
-                    Icons.copy_rounded,
-                    color: AppColors.darkBlue,
-                    size: 20,
-                  ),
-                  action: AppStrings.copy),
+              TrendDetailActionButton(
+                icon: const Icon(
+                  Icons.copy_rounded,
+                  color: AppColors.darkBlue,
+                  size: 20,
+                ),
+                action: AppStrings.copy,
+                onTap: () {},
+              ),
+              const SizedBox(width: 10),
+              TrendDetailActionButton(
+                icon: const Icon(
+                  Icons.star_border_rounded,
+                  color: AppColors.gold,
+                  size: 20,
+                ),
+                action: AppStrings.save,
+                onTap: () {},
+              ),
               const SizedBox(width: 10),
               TrendDetailActionButton(
                 icon: SizedBox(
@@ -99,6 +111,7 @@ class TrendDetailsCard extends StatelessWidget {
                   child: Image(image: AppImages.xLogo),
                 ),
                 action: AppStrings.open,
+                onTap: () {},
               ),
             ],
           ),
@@ -110,19 +123,25 @@ class TrendDetailsCard extends StatelessWidget {
 
 class TrendDetailActionButton extends StatelessWidget {
   const TrendDetailActionButton(
-      {super.key, required this.icon, required this.action});
+      {super.key,
+      required this.icon,
+      required this.action,
+      required this.onTap});
 
   final Widget icon;
   final String action;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: AppMaterial(
-        child: Container(
+        color: AppColors.grey100,
+        borderRadius: BorderRadius.circular(8),
+        inkwellBorderRadius: BorderRadius.circular(8),
+        onTap: onTap,
+        child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-              color: AppColors.grey100, borderRadius: BorderRadius.circular(8)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
