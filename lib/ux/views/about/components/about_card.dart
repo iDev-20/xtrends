@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:xtrends/ux/model/ui_models.dart';
 import 'package:xtrends/ux/shared/components/icon_box.dart';
+import 'package:xtrends/ux/shared/models/ui_models.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 
 class AboutCard extends StatelessWidget {

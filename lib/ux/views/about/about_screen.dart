@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:xtrends/ux/model/ui_models.dart';
 import 'package:xtrends/ux/shared/components/app_page.dart';
+import 'package:xtrends/ux/shared/models/ui_models.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
 import 'package:xtrends/ux/views/about/components/about_card.dart';

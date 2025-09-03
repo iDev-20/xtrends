@@ -20,6 +20,7 @@ class _HomeGreetingCardState extends State<HomeGreetingCard> {
   void initState() {
     super.initState();
     viewModel = context.read<HomeViewModel>();
+    viewModel.loadLocation();
   }
 
   @override
@@ -32,41 +33,47 @@ class _HomeGreetingCardState extends State<HomeGreetingCard> {
           color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      AppStrings.hello,
-                      style: TextStyle(color: AppColors.grey400),
-                    ),
-                    Text(
-                      '${viewModel.firstName}!',
-                      style: const TextStyle(
-                          color: AppColors.darkBlueText,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                AppImages.svgGreetingIcon
-              ],
-            ),
-            const SizedBox(height: 16),
-            CustomAppDropDownField(
-              labelText: AppStrings.selectLocation,
-              valueHolder: 'Ghana',
-              stringItems: true,
-              items: const ['Ghana', 'United States', 'Nigeria'],
-              onChanged: (p0) {},
-            ),
-          ],
-        ),
+        child: Consumer<HomeViewModel>(builder: (context, vm, _) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        AppStrings.hello,
+                        style: TextStyle(color: AppColors.grey400),
+                      ),
+                      Text(
+                        '${vm.firstName}!',
+                        style: const TextStyle(
+                            color: AppColors.darkBlueText,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  AppImages.svgGreetingIcon
+                ],
+              ),
+              const SizedBox(height: 16),
+              CustomAppDropDownField(
+                labelText: AppStrings.selectLocation,
+                valueHolder: vm.currentLocation ?? 'Loading...',
+                stringItems: true,
+                items: [
+                  vm.currentLocation ?? 'Loading...',
+                  'United States',
+                  'Nigeria'
+                ],
+                onChanged: (p0) {},
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
