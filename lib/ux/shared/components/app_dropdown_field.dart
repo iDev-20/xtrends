@@ -43,7 +43,7 @@ class CustomAppDropDownField extends StatelessWidget {
             child: Text(
               labelText ?? '',
               style: const TextStyle(
-                  color: AppColors.black, fontWeight: FontWeight.w500),
+                  color: AppColors.grey400, fontWeight: FontWeight.w600),
             ),
           ),
         ),
@@ -51,17 +51,18 @@ class CustomAppDropDownField extends StatelessWidget {
           isExpanded: true,
           validator: validator,
           value: valueHolder,
+          // alignment: AlignmentDirectional.bottomStart,
           icon: const Icon(Icons.keyboard_arrow_down_rounded,
               color: AppColors.darkBlue),
           style: const TextStyle(
               fontFamily: 'PlusJakartaSans',
-              color: AppColors.black,
+              color: AppColors.darkBlueText,
               overflow: TextOverflow.ellipsis),
           decoration: InputDecoration(
             filled: true,
-            fillColor: AppColors.grey,
+            fillColor: AppColors.grey100,
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             hintText: hintText,
             hintStyle: const TextStyle(
                 color: AppColors.grey200,
@@ -91,7 +92,7 @@ class CustomAppDropDownField extends StatelessWidget {
 
 InputBorder inputBorder({double? borderRadius}) {
   return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(borderRadius ?? 8),
+    borderRadius: BorderRadius.circular(borderRadius ?? 12),
     borderSide: const BorderSide(color: AppColors.transparent),
   );
 }

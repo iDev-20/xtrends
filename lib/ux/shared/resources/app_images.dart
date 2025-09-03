@@ -28,10 +28,11 @@ class AppImages {
       SvgPicture.asset('assets/svgs/circle_questionMark.svg');
   static SvgPicture svgSearchIcon =
       SvgPicture.asset('assets/svgs/search_icon.svg');
+  static SvgPicture svgBackIcon = SvgPicture.asset('assets/svgs/back_icon.svg');
 
   //bottom nav
   static SvgPicture svgUnselectedHomeIcon =
-      SvgPicture.asset('assets/svgs/unselected_home_icon.svg');
+      SvgPicture.asset('assets/svgs/bottom-nav/unselected_home_icon.svg');
   static SvgPicture svgSelectedHomeIcon =
-      SvgPicture.asset('assets/svgs/selected_home_icon.svg');
+      SvgPicture.asset('assets/svgs/bottom-nav/selected_home_icon.svg');
 }

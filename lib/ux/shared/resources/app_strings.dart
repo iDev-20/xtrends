@@ -34,7 +34,7 @@ class AppStrings {
   static const unitedStates = 'United States';
   static const trendingInUS = 'Trending in United States';
   static const technology = 'Technology';
-  static const futureOfAI = '#FutureOfAI';
+  static const futureOfAI = 'FutureOfAI';
 
   //Trends
   static const sampleTweetNo = '12.5K Tweets';
@@ -44,7 +44,7 @@ class AppStrings {
   static const sampleRank = 'Rank 1';
 
   //Favorites
-  static const techTuesday = '#TechTuesday';
+  static const techTuesday = 'TechTuesday';
   static const trendingInSan = 'Trending in San Francisco';
 
   //About

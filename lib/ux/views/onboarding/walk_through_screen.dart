@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:xtrends/ux/navigation/navigation.dart';
+import 'package:xtrends/ux/navigation/navigation_host_page.dart';
 import 'package:xtrends/ux/shared/components/app_buttons.dart';
 import 'package:xtrends/ux/shared/components/app_form_fields.dart';
 import 'package:xtrends/ux/shared/components/slide_indicator.dart';
@@ -48,6 +50,7 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLastPage = _currentPage == 2;
     return Scaffold(
       backgroundColor:
           _currentPage == 1 ? AppColors.primary50 : AppColors.white,
@@ -126,7 +129,7 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        if (_currentPage == 2)
+                        if (isLastPage)
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 18),
                             child: CustomAppTextFormField(
@@ -151,11 +154,19 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
                   child: CustomAppButton(
                     onTap: () {
                       //set walkthrough seen
+                      isLastPage
+                          ? Navigation.navigateToScreen(
+                              context: context,
+                              screen: const NavigationHostPage(),
+                            )
+                          : _pageController.nextPage(
+                              duration: _slideAnimationDuration,
+                              curve: Curves.easeIn,
+                            );
                     },
                     foregroundColor: Colors.white,
-                    child: Text(_currentPage == 2
-                        ? AppStrings.continueText
-                        : AppStrings.next),
+                    child: Text(
+                        isLastPage ? AppStrings.continueText : AppStrings.next),
                   ),
                 ),
               ],

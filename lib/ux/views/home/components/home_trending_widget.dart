@@ -1,0 +1,107 @@
+import 'package:flutter/material.dart';
+import 'package:xtrends/ux/shared/resources/app_colors.dart';
+import 'package:xtrends/ux/shared/resources/app_strings.dart';
+
+class HomeTrendingWidget extends StatelessWidget {
+  const HomeTrendingWidget({super.key});
+
+  final int index = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              AppStrings.trendingInUS,
+              style: TextStyle(
+                  color: AppColors.darkBlue,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          ...List.generate(
+            5,
+            (index) {
+              return HomeTrendsCard(
+                index: index,
+                category: AppStrings.technology,
+                trend: AppStrings.futureOfAI,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeTrendsCard extends StatelessWidget {
+  const HomeTrendsCard(
+      {super.key,
+      required this.index,
+      required this.category,
+      required this.trend});
+
+  final int index;
+  final String category;
+  final String trend;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: const BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(12),
+          bottomRight: Radius.circular(12),
+        ),
+        border: Border(
+          top: BorderSide(color: AppColors.grey100, width: 0.5),
+        ),
+      ),
+      child: Row(
+        children: [
+          Text(
+            index.toString(),
+            style: const TextStyle(
+              color: AppColors.grey250,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  category,
+                  style: const TextStyle(
+                    color: AppColors.grey300,
+                  ),
+                ),
+                Text(
+                  '#$trend',
+                  style: const TextStyle(
+                    color: AppColors.darkBlue,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Icon(Icons.chevron_right_rounded, color: AppColors.grey200)
+        ],
+      ),
+    );
+  }
+}
