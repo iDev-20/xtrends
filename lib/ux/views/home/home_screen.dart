@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
       hideAppBar: true,
       body: ListView(
         padding: const EdgeInsets.all(16),
-        children: [
+        children: const [
           HomeGreetingCard(),
           HomeTrendingWidget(),
         ],

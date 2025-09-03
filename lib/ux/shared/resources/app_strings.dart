@@ -52,10 +52,10 @@ class AppStrings {
   //About
   static const whatsTrending = "What's Trending?";
   static const whatsTrendingDetails =
-      "Stay informed with real-time trending topics from Twitter, tailored to your location. Discover what's buzzing in your city and around the world.";
+      "Stay informed with real-time trending topics from Twitter(X), tailored to your location. Discover what's buzzing in your city and around the world.";
   static const howItWorks = 'How It Works';
   static const howItWorksDetails =
-      'Our app aggregates trending topics directly from Twitter, providing a curated view of the most discussed subjects. Explore trends by location or view global trends.';
+      'Our app aggregates trending topics directly from Twitter(X), providing a curated view of the most discussed subjects. Explore trends by location or view global trends.';
   static const privacy = 'Privacy';
   static const privacyDetails =
       'We respect your privacy. No personal data is collected or stored. Your location is used solely to display relevant trends and is not shared with third parties.';

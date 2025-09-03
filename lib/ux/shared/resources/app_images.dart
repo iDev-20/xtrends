@@ -26,7 +26,11 @@ class AppImages {
   static SvgPicture svgTrendIconWithStar =
       SvgPicture.asset('assets/svgs/trend_icon_with_star.svg');
   static SvgPicture svgCircleQuestioMark =
-      SvgPicture.asset('assets/svgs/circle_questionMark.svg');
+      SvgPicture.asset('assets/svgs/circle_question_mark.svg');
+  static SvgPicture svgHowItWorksIcon =
+      SvgPicture.asset('assets/svgs/how_it_works_icon.svg');
+  static SvgPicture svgPrivacyIcon =
+      SvgPicture.asset('assets/svgs/privacy_icon.svg');
   static SvgPicture svgSearchIcon =
       SvgPicture.asset('assets/svgs/search_icon.svg');
   static SvgPicture svgBackIcon = SvgPicture.asset('assets/svgs/back_icon.svg');

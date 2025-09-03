@@ -3,6 +3,7 @@ import 'package:xtrends/ux/shared/components/app_page.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
+import 'package:xtrends/ux/views/about/about_screen.dart';
 import 'package:xtrends/ux/views/saved_trends/saved_trends_screen.dart';
 import 'package:xtrends/ux/views/home/components/home_app_bar.dart';
 import 'package:xtrends/ux/views/home/home_screen.dart';
@@ -76,7 +77,7 @@ class _NavigationHostPageState extends State<NavigationHostPage> {
       case 2:
         return const SavedTrendsScreen();
       case 3:
-        return const HomeScreen();
+        return const AboutScreen();
       default:
         return const SizedBox();
     }
