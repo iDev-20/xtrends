@@ -108,25 +108,25 @@ class _CustomAppTextFormFieldState extends State<CustomAppTextFormField> {
                 filled: true,
                 fillColor: (widget.enabled && isFocused)
                     ? AppColors.primary50
-                    : AppColors.grey,
+                    : AppColors.grey100,
                 suffixIcon: widget.suffixWidget,
                 contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                 hintText: widget.hintText,
                 hintStyle: const TextStyle(
                   color: AppColors.grey200,
                   fontSize: 14,
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(color: AppColors.transparent),
                 ),
                 disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(color: AppColors.transparent),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(color: AppColors.primaryColor),
                 ),
                 border: OutlineInputBorder(
@@ -356,8 +356,7 @@ class _CustomAppLongTextFormFieldState
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4),
-                borderSide:
-                    const BorderSide(color: AppColors.transparent),
+                borderSide: const BorderSide(color: AppColors.transparent),
               ),
             ),
             inputFormatters: widget.inputFormatters,

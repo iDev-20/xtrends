@@ -28,7 +28,7 @@ class CustomAppButton extends StatelessWidget {
   ButtonStyle getStyle() {
     return ButtonStyle(
       fixedSize: MaterialStateProperty.all(
-        const Size.fromHeight(58),
+        const Size.fromHeight(52),
       ),
       enableFeedback: true,
       overlayColor: MaterialStateColor.resolveWith((states) =>

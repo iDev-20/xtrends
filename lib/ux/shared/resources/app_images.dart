@@ -14,6 +14,10 @@ class AppImages {
       const AssetImage('assets/images/onboarding_image_3.png');
 
   //Svgs
+  static SvgPicture svgSlide1 =
+      SvgPicture.asset('assets/svgs/slide_1.svg', height: 220, width: 220);
+  static SvgPicture svgSlide2 = SvgPicture.asset('assets/svgs/slide_2.svg');
+  static SvgPicture svgSlide3 = SvgPicture.asset('assets/svgs/slide_3.svg');
   static SvgPicture svgGreetingIcon =
       SvgPicture.asset('assets/svgs/greeting_icon.svg');
   static SvgPicture svgRefreshIcon =
