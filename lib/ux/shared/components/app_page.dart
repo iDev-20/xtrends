@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xtrends/ux/navigation/navigation.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
-import 'package:xtrends/ux/shared/resources/app_images.dart';
 
 class AppPage extends StatelessWidget {
   const AppPage({
@@ -43,8 +42,12 @@ class AppPage extends StatelessWidget {
                           Navigation.back(context: context);
                         },
                         child: Container(
-                            padding: const EdgeInsets.only(top: 20, bottom: 20),
-                            child: AppImages.svgBackIcon),
+                          padding: const EdgeInsets.only(top: 20, bottom: 20),
+                          child: const Icon(
+                            Icons.arrow_back_rounded,
+                            color: AppColors.darkBlue,
+                          ),
+                        ),
                       ),
                 centerTitle: centerTitle ?? true,
                 title: Text(title ?? ''),

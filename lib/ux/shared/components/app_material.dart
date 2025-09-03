@@ -28,12 +28,13 @@ class AppMaterial extends StatelessWidget {
       color: color ?? AppColors.transparent,
       elevation: elevation ?? 0,
       borderRadius: borderRadius,
+      shadowColor: AppColors.shadowColor,
       child: InkWell(
         onTap: onTap,
         borderRadius: inkwellBorderRadius,
         customBorder: customBorder,
-        overlayColor: MaterialStateColor.resolveWith((states) =>
-            overlayColor ?? Colors.grey.withOpacity(0.2)),
+        overlayColor: MaterialStateColor.resolveWith(
+            (states) => overlayColor ?? AppColors.grey.withOpacity(0.3)),
         child: child,
       ),
     );

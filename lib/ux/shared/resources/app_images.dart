@@ -12,6 +12,7 @@ class AppImages {
       const AssetImage('assets/images/onboarding_image_2.png');
   static AssetImage onboardingImage3 =
       const AssetImage('assets/images/onboarding_image_3.png');
+  static AssetImage xLogo = const AssetImage('assets/images/x_logo_frame.png');
 
   //Svgs
   static SvgPicture svgSlide1 =
@@ -29,6 +30,7 @@ class AppImages {
   static SvgPicture svgSearchIcon =
       SvgPicture.asset('assets/svgs/search_icon.svg');
   static SvgPicture svgBackIcon = SvgPicture.asset('assets/svgs/back_icon.svg');
+  static SvgPicture svgRankIcon = SvgPicture.asset('assets/svgs/rank_icon.svg');
 
   //bottom nav
   static SvgPicture svgUnselectedHomeIcon =

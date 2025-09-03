@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:xtrends/ux/shared/components/app_material.dart';
+import 'package:xtrends/ux/shared/components/icon_box.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
@@ -34,21 +33,10 @@ class HomeAppBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          iconBox(icon: AppImages.svgSearchIcon),
+          IconBox(icon: AppImages.svgSearchIcon),
           const SizedBox(width: 8),
-          iconBox(icon: AppImages.svgRefreshIcon),
+          IconBox(icon: AppImages.svgRefreshIcon),
         ],
-      ),
-    );
-  }
-
-  Widget iconBox({required SvgPicture icon}) {
-    return AppMaterial(
-      child: Ink(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: const BoxDecoration(
-            color: AppColors.grey100, shape: BoxShape.circle),
-        child: icon,
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
 import 'package:xtrends/ux/views/home/components/home_app_bar.dart';
 import 'package:xtrends/ux/views/home/home_screen.dart';
+import 'package:xtrends/ux/views/trends/trends_screen.dart';
 
 class NavigationHostPage extends StatefulWidget {
   const NavigationHostPage({super.key});
@@ -70,10 +71,10 @@ class _NavigationHostPageState extends State<NavigationHostPage> {
       case 0:
         return const HomeScreen();
       case 1:
+        return const TrendsScreen();
+      case 2:
         return const HomeScreen();
       case 3:
-        return const HomeScreen();
-      case 4:
         return const HomeScreen();
       default:
         return const SizedBox();

@@ -42,6 +42,7 @@ class AppStrings {
   static const sampleTweetURL = 'twitter.com/i/events/12345';
   static const copy = 'Copy';
   static const sampleRank = 'Rank 1';
+  static const open = 'Open';
 
   //Favorites
   static const techTuesday = 'TechTuesday';

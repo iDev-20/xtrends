@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:xtrends/ux/navigation/navigation.dart';
+import 'package:xtrends/ux/shared/components/app_material.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
+import 'package:xtrends/ux/views/trends/trend_details_screen.dart';
 
 class HomeTrendingWidget extends StatelessWidget {
   const HomeTrendingWidget({super.key});
@@ -56,51 +59,61 @@ class HomeTrendsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(12),
-          bottomRight: Radius.circular(12),
-        ),
-        border: Border(
-          top: BorderSide(color: AppColors.grey100, width: 0.5),
-        ),
+    return AppMaterial(
+      color: AppColors.white,
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(12),
+        bottomRight: Radius.circular(12),
       ),
-      child: Row(
-        children: [
-          Text(
-            index.toString(),
-            style: const TextStyle(
-              color: AppColors.grey250,
-              fontWeight: FontWeight.bold,
-            ),
+      inkwellBorderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(12),
+        bottomRight: Radius.circular(12),
+      ),
+      onTap: () {
+        Navigation.navigateToScreen(
+            context: context, screen: const TrendDetailsScreen());
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: AppColors.grey100, width: 0.5),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  category,
-                  style: const TextStyle(
-                    color: AppColors.grey300,
-                  ),
-                ),
-                Text(
-                  '#$trend',
-                  style: const TextStyle(
-                    color: AppColors.darkBlue,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+        ),
+        child: Row(
+          children: [
+            Text(
+              index.toString(),
+              style: const TextStyle(
+                color: AppColors.grey250,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const Icon(Icons.chevron_right_rounded, color: AppColors.grey200)
-        ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    category,
+                    style: const TextStyle(
+                      color: AppColors.grey300,
+                    ),
+                  ),
+                  Text(
+                    '#$trend',
+                    style: const TextStyle(
+                      color: AppColors.darkBlue,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right_rounded, color: AppColors.grey200)
+          ],
+        ),
       ),
     );
   }
