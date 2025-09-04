@@ -20,7 +20,9 @@ class NetworkHelper {
 
   Future<dynamic> getData() async {
     try {
-      final response = await http.get(Uri.https(url, path, headers));
+      final uri = Uri.https(url, path, queryParams);
+      final response =
+          await http.get(uri, headers: headers.cast<String, String>());
 
       if (response.statusCode == 200) {
         String data = response.body;
@@ -30,7 +32,7 @@ class NetworkHelper {
         throw Exception('$errorMessage: ${response.statusCode}');
       }
     } catch (e) {
-      print(e);
+      print('Network Error: $e');
       return null;
     }
   }

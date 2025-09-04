@@ -7,18 +7,18 @@ import 'package:xtrends/ux/services/networking.dart';
 import 'package:xtrends/ux/shared/resources/app_constants.dart';
 
 class TrendsRepository {
-  Future<int> fetchWOEID() async {
+  Future<String> fetchPlaceID() async {
     try {
       final pref = await SharedPreferences.getInstance();
       final country = await LocationService().getCountryName();
 
       //Check cache first
-      final cachedData = pref.get(AppConstants.woeidCacheKey);
+      final cachedData = pref.get(AppConstants.placeIDCacheKey);
       if (cachedData != null) {
         final cachedMap =
             jsonDecode(cachedData as String) as Map<String, dynamic>;
         if (cachedMap.containsKey(country)) {
-          return cachedMap[country];
+          return cachedMap[country].toString();
         }
       }
 
@@ -30,29 +30,33 @@ class TrendsRepository {
             'x-rapidapi-host': AppConstants.apiHost,
             'x-rapidapi-key': AppConstants.apiKey
           },
-          errorMessage: 'Failed to fetch trends');
+          errorMessage: 'Failed to fetch placeID');
+
+      print(
+          "Fetching placeID from: https://${AppConstants.apiHost}/location");
 
       final locationResult = await networkHelper.getData();
+      final locations = (locationResult['locations'] as List<dynamic>);
 
-      final locations = jsonDecode(locationResult.body);
-
-      final location = locations.firtWhere(
-        (loc) => loc['country'] == country,
-        orElse: () => {'woeid': 1},
+      final location = locations.firstWhere(
+        (loc) => loc['name'].toString().toLowerCase() == country?.toLowerCase(),
+        orElse: () => {'placeID': ''},
       );
-      final woeid = location['woeid'];
+      final placeID = location['placeID']?.toString() ?? '';
 
       final newCache = cachedData != null
           ? jsonDecode(cachedData as String) as Map<String, dynamic>
           : <String, dynamic>{};
 
-      newCache[country ?? ''] = woeid;
-      await pref.setString(AppConstants.woeidCacheKey, jsonEncode(newCache));
+      newCache[country ?? ''] = placeID;
+      await pref.setString(AppConstants.placeIDCacheKey, jsonEncode(newCache));
+      print('country ==> $country');
+      print('placeId ==> $placeID');
 
-      return woeid;
+      return placeID;
     } catch (e) {
-      debugPrint("Error fetching WOEID: $e");
-      return 1;
+      debugPrint("Error fetching placeID: $e");
+      return 'error';
     }
   }
 }

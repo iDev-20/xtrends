@@ -21,21 +21,21 @@ class AboutItem {
 }
 
 class TrendLocation {
-  final String country;
   final String name;
-  final int woeid;
+  final String placeID;
+  final String locationType;
 
   TrendLocation({
-    required this.country,
     required this.name,
-    required this.woeid,
+    required this.placeID,
+    required this.locationType,
   });
 
   factory TrendLocation.fromJson(Map<String, dynamic> json) {
     return TrendLocation(
-      country: json['country'] ?? '',
       name: json['name'] ?? '',
-      woeid: json['woeid'] ?? 1,
+      placeID: json['placeID'] ?? '',
+      locationType: json['locationType'] ?? '',
     );
   }
 }
@@ -44,7 +44,6 @@ class Trend {
   final String trendName;
   final String domain;
   final int postCount;
-  final int tweetVolume;
   final int rank;
   final String mobileIntent;
   final String webUrl;
@@ -53,7 +52,6 @@ class Trend {
     required this.trendName,
     required this.domain,
     required this.postCount,
-    required this.tweetVolume,
     required this.rank,
     required this.mobileIntent,
     required this.webUrl,
@@ -64,7 +62,6 @@ class Trend {
       trendName: json['name'] ?? '',
       domain: json['domain'] ?? '',
       postCount: json['postCount'] ?? 0,
-      tweetVolume: json['tweet_volume'] ?? 0,
       rank: json['rank'] ?? 0,
       mobileIntent: json['mobileIntent'] ?? '',
       webUrl: json['webUrl'] ?? '',

@@ -27,7 +27,7 @@ class TrendCard extends StatelessWidget {
         color: AppColors.white,
         onTap: () {
           Navigation.navigateToScreen(
-              context: context, screen: const TrendDetailsScreen());
+              context: context, screen: TrendDetailsScreen(index: index));
         },
         child: Padding(
           padding: const EdgeInsets.all(16),

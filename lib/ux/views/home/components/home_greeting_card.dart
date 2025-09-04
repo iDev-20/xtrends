@@ -19,9 +19,6 @@ class _HomeGreetingCardState extends State<HomeGreetingCard> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomeViewModel>().loadLocation();
-    });
   }
 
   static const supportedCountries = ['Ghana', 'United States', 'Nigeria'];

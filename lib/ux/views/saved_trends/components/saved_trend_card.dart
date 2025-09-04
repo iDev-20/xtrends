@@ -23,7 +23,7 @@ class SavedTrendCard extends StatelessWidget {
         color: AppColors.white,
         onTap: () {
           Navigation.navigateToScreen(
-              context: context, screen: const TrendDetailsScreen());
+              context: context, screen: const TrendDetailsScreen(index: 1));
         },
         child: Padding(
           padding: const EdgeInsets.all(16),

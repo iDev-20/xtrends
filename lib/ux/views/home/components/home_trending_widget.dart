@@ -5,12 +5,13 @@ import 'package:xtrends/ux/shared/components/app_material.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
 import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
+import 'package:xtrends/ux/view_models.dart/trends_view_model.dart';
 import 'package:xtrends/ux/views/trends/trend_details_screen.dart';
 
 class HomeTrendingWidget extends StatelessWidget {
   const HomeTrendingWidget({super.key});
 
-  final int index = 1;
+  final int index = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -27,23 +28,51 @@ class HomeTrendingWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              '${AppStrings.trendingIn} $location',
+              '${AppStrings.trendingIn} ${location.isNotEmpty ? location : 'your area'}',
               style: const TextStyle(
                   color: AppColors.darkBlue,
                   fontSize: 18,
                   fontWeight: FontWeight.bold),
             ),
           ),
-          ...List.generate(
-            5,
-            (index) {
-              return HomeTrendsCard(
-                index: index,
-                category: AppStrings.technology,
-                trend: AppStrings.futureOfAI,
+          Consumer<TrendsViewModel>(builder: (context, vm, _) {
+            if (vm.isLoading) {
+              return const Padding(
+                padding: EdgeInsets.all(16),
+                child: CircularProgressIndicator(),
               );
-            },
-          ),
+            }
+
+            if (vm.trends.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  location.isEmpty
+                      ? 'We couldn’t detect your location.'
+                      : 'No trending topics found for $location.',
+                  style: const TextStyle(
+                    color: AppColors.grey300,
+                    fontSize: 14,
+                  ),
+                ),
+              );
+            }
+
+            final topTrends = vm.trends.take(10).toList();
+            return Column(
+              children: List.generate(
+                topTrends.length,
+                (index) {
+                  final trend = vm.trends[index];
+                  return HomeTrendsCard(
+                    index: index + 1,
+                    category: trend.domain,
+                    trend: trend.trendName,
+                  );
+                },
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -75,7 +104,7 @@ class HomeTrendsCard extends StatelessWidget {
       ),
       onTap: () {
         Navigation.navigateToScreen(
-            context: context, screen: const TrendDetailsScreen());
+            context: context, screen: TrendDetailsScreen(index: index));
       },
       child: Container(
         padding: const EdgeInsets.all(16),

@@ -6,7 +6,7 @@ class AppConstants {
   static const firstNameKey = 'first.name';
   static const firstTimeKey = 'first.time';
   static final apiKey = dotenv.env['RAPIDAPI_KEY'];
-  static final apiHost = dotenv.env['RAPIDAPI_KEY'];
-  static const woeidCacheKey = 'woeid.cache';
+  static final apiHost = dotenv.env['RAPIDAPI_HOST'];
+  static const placeIDCacheKey = 'placeID.cache';
   static const locationKey = 'location';
 }

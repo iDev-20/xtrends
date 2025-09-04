@@ -26,6 +26,7 @@ class HomeViewModel extends ChangeNotifier {
       _currentLocation = pref.get(AppConstants.locationKey) as String?;
 
       final country = await LocationService().getCountryName();
+
       if (country != null && country.isNotEmpty) {
         _currentLocation = country;
         await pref.setString(AppConstants.locationKey, country);

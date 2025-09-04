@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:xtrends/ux/services/networking.dart';
 import 'package:xtrends/ux/services/trends_repository.dart';
@@ -9,10 +7,10 @@ import 'package:xtrends/ux/shared/resources/app_constants.dart';
 class TrendsViewModel extends ChangeNotifier {
   final TrendsRepository _repo = TrendsRepository();
 
-  List<dynamic> _trends = [];
+  List<Trend> _trends = [];
   bool _loading = false;
 
-  List<dynamic> get trends => _trends;
+  List<Trend> get trends => _trends;
   bool get isLoading => _loading;
 
   Future<void> fetchTrends() async {
@@ -20,11 +18,11 @@ class TrendsViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final woeid = await _repo.fetchWOEID();
+      final placeID = await _repo.fetchPlaceID();
 
       NetworkHelper networkHelper = NetworkHelper(
           url: AppConstants.apiHost ?? '',
-          path: '/location/$woeid',
+          path: '/location/$placeID',
           headers: {
             'x-rapidapi-host': AppConstants.apiHost,
             'x-rapidapi-key': AppConstants.apiKey
@@ -32,11 +30,15 @@ class TrendsViewModel extends ChangeNotifier {
           // queryParams: {'woeid': woeid.toString()},
           errorMessage: 'Failed to fetch trends');
 
-      final trendsResult = await networkHelper.getData();
-      final data = jsonDecode(trendsResult.body);
+      print(
+          "Fetching trends from: https://${AppConstants.apiHost}/location/$placeID");
 
-      final trendingResponse = TrendingResponse.fromJson(data);
-      _trends = trendingResponse.trends;
+      final trendsResult = await networkHelper.getData();
+
+      if (trendsResult != null) {
+        final trendingResponse = TrendingResponse.fromJson(trendsResult);
+        _trends = trendingResponse.trends;
+      }
     } catch (e) {
       debugPrint("Error fetching trends: $e");
       _trends = [];
