@@ -19,18 +19,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final homeVM = Provider.of<HomeViewModel>(context, listen: false);
-      final trendsVM = Provider.of<TrendsViewModel>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        final homeVM = Provider.of<HomeViewModel>(context, listen: false);
+        final trendsVM = Provider.of<TrendsViewModel>(context, listen: false);
 
-      await homeVM.loadLocation();
+        if (!homeVM.isLocationLoaded) {
+          await homeVM.loadLocation();
 
-      if (homeVM.currentLocation != null) {
-        await trendsVM.fetchTrends();
-      } else {
-        debugPrint("No location provided — skipping trends fetch");
-      }
-    });
+          if (homeVM.currentLocation != null) {
+            await trendsVM.fetchTrends();
+          } else {
+            debugPrint("No location provided — skipping trends fetch");
+          }
+        }
+      },
+    );
   }
 
   @override

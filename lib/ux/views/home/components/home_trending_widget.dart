@@ -11,8 +11,6 @@ import 'package:xtrends/ux/views/trends/trend_details_screen.dart';
 class HomeTrendingWidget extends StatelessWidget {
   const HomeTrendingWidget({super.key});
 
-  final int index = -1;
-
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
@@ -62,10 +60,10 @@ class HomeTrendingWidget extends StatelessWidget {
             return Column(
               children: List.generate(
                 topTrends.length,
-                (index) {
-                  final trend = vm.trends[index];
+                (i) {
+                  final trend = vm.trends[i];
                   return HomeTrendsCard(
-                    index: index + 1,
+                    index: i,
                     category: trend.domain,
                     trend: trend.trendName,
                   );
@@ -116,7 +114,7 @@ class HomeTrendsCard extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              index.toString(),
+              (index + 1).toString(),
               style: const TextStyle(
                 color: AppColors.grey250,
                 fontWeight: FontWeight.bold,

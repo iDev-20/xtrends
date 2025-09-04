@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xtrends/platform/extensions/string_extensions.dart';
 import 'package:xtrends/ux/shared/components/app_page.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
 import 'package:xtrends/ux/view_models.dart/trends_view_model.dart';
@@ -22,10 +23,11 @@ class TrendDetailsScreen extends StatelessWidget {
               builder: (context, viewModel, _) {
                 final trend = viewModel.trends[index];
                 return TrendDetailsCard(
-                  header: '$index. Trending in ${trend.domain}',
+                  header: '${index + 1}. Trending in ${trend.domain}',
                   rank: trend.rank,
                   trendName: trend.trendName,
-                  noOfTweets: '${trend.postCount} Tweets',
+                  noOfTweets:
+                      '${StringExtension.toTweetCount(trend.postCount)} Tweets',
                   tweetUrl: trend.webUrl,
                 );
               },

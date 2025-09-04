@@ -34,7 +34,7 @@ class TrendCard extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                index.toString(),
+                (index + 1).toString(),
                 style: const TextStyle(
                     color: AppColors.grey250,
                     fontSize: 18,
