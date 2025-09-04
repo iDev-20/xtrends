@@ -13,12 +13,12 @@ class TrendsViewModel extends ChangeNotifier {
   List<Trend> get trends => _trends;
   bool get isLoading => _loading;
 
-  Future<void> fetchTrends() async {
+  Future<void> fetchTrends({String? country}) async {
     _loading = true;
     notifyListeners();
 
     try {
-      final placeID = await _repo.fetchPlaceID();
+      final placeID = await _repo.fetchPlaceID(countryName: country);
 
       NetworkHelper networkHelper = NetworkHelper(
           url: AppConstants.apiHost ?? '',
@@ -27,11 +27,10 @@ class TrendsViewModel extends ChangeNotifier {
             'x-rapidapi-host': AppConstants.apiHost,
             'x-rapidapi-key': AppConstants.apiKey
           },
-          // queryParams: {'woeid': woeid.toString()},
           errorMessage: 'Failed to fetch trends');
 
-      print(
-          "Fetching trends from: https://${AppConstants.apiHost}/location/$placeID");
+      // print(
+      //     "Fetching trends from: https://${AppConstants.apiHost}/location/$placeID");
 
       final trendsResult = await networkHelper.getData();
 

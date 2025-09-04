@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:xtrends/platform/utils/general_utils.dart';
 import 'package:xtrends/ux/shared/components/app_material.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
 
 class TrendDetailsCard extends StatelessWidget {
-  const TrendDetailsCard(
-      {super.key,
-      required this.header,
-      required this.rank,
-      required this.trendName,
-      required this.noOfTweets,
-      required this.tweetUrl});
+  const TrendDetailsCard({
+    super.key,
+    required this.header,
+    required this.rank,
+    required this.trendName,
+    required this.noOfTweets,
+    required this.tweetWebUrl,
+    required this.tweetMobileUrl,
+  });
 
   final String header;
   final int rank;
   final String trendName;
   final String noOfTweets;
-  final String tweetUrl;
+  final String tweetWebUrl;
+  final String tweetMobileUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +67,7 @@ class TrendDetailsCard extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            '#$trendName',
+            trendName,
             style: const TextStyle(
                 color: AppColors.darkBlueText,
                 fontSize: 24,
@@ -77,7 +81,7 @@ class TrendDetailsCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            tweetUrl,
+            tweetWebUrl,
             style: const TextStyle(
                 color: AppColors.darkBlueText, fontWeight: FontWeight.w500),
           ),
@@ -91,7 +95,10 @@ class TrendDetailsCard extends StatelessWidget {
                   size: 20,
                 ),
                 action: AppStrings.copy,
-                onTap: () {},
+                onTap: () {
+                  final text = Utils.convertToX(tweetWebUrl);
+                  Utils.copyText(text: text);
+                },
               ),
               const SizedBox(width: 10),
               TrendDetailActionButton(
@@ -111,7 +118,9 @@ class TrendDetailsCard extends StatelessWidget {
                   child: Image(image: AppImages.xLogo),
                 ),
                 action: AppStrings.open,
-                onTap: () {},
+                onTap: () async {
+                  await Utils.openUrl(url: tweetMobileUrl);
+                },
               ),
             ],
           ),

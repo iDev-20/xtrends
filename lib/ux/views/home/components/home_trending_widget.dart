@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xtrends/platform/utils/general_utils.dart';
 import 'package:xtrends/ux/navigation/navigation.dart';
 import 'package:xtrends/ux/shared/components/app_material.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
@@ -65,7 +66,7 @@ class HomeTrendingWidget extends StatelessWidget {
                   return HomeTrendsCard(
                     index: i,
                     category: trend.domain,
-                    trend: trend.trendName,
+                    trend: Utils.formatTrendName(trend: trend.trendName),
                   );
                 },
               ),
@@ -132,7 +133,7 @@ class HomeTrendsCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '#$trend',
+                    trend,
                     style: const TextStyle(
                       color: AppColors.darkBlue,
                       fontSize: 16,

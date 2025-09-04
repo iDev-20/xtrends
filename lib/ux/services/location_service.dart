@@ -13,8 +13,8 @@ class LocationService {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
 
-    print(position.longitude);
-    print(position.latitude);
+    // print(position.longitude);
+    // print(position.latitude);
 
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);

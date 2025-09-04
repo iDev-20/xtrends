@@ -7,17 +7,23 @@ import 'package:xtrends/ux/services/networking.dart';
 import 'package:xtrends/ux/shared/resources/app_constants.dart';
 
 class TrendsRepository {
-  Future<String> fetchPlaceID() async {
+  Future<String> fetchPlaceID({String? countryName}) async {
     try {
       final pref = await SharedPreferences.getInstance();
-      final country = await LocationService().getCountryName();
+      final country = countryName ?? await LocationService().getCountryName();
+
+      if (country == null || country.isEmpty) {
+        debugPrint("No country name found");
+        return '';
+      }
 
       //Check cache first
       final cachedData = pref.get(AppConstants.placeIDCacheKey);
       if (cachedData != null) {
         final cachedMap =
-            jsonDecode(cachedData as String) as Map<String, dynamic>;
+            jsonDecode(cachedData.toString()) as Map<String, dynamic>;
         if (cachedMap.containsKey(country)) {
+          debugPrint("Place ID fetched from cache for $country");
           return cachedMap[country].toString();
         }
       }
@@ -32,26 +38,31 @@ class TrendsRepository {
           },
           errorMessage: 'Failed to fetch placeID');
 
-      print(
-          "Fetching placeID from: https://${AppConstants.apiHost}/location");
+      // print("Fetching placeID from: https://${AppConstants.apiHost}/location");
 
       final locationResult = await networkHelper.getData();
-      final locations = (locationResult['locations'] as List<dynamic>);
+
+      if (locationResult == null || locationResult['locations'] == null) {
+        debugPrint("API returned no locations");
+        return '';
+      }
+      final locations =
+          List<Map<String, dynamic>>.from(locationResult['locations']);
 
       final location = locations.firstWhere(
-        (loc) => loc['name'].toString().toLowerCase() == country?.toLowerCase(),
-        orElse: () => {'placeID': ''},
+        (loc) => loc['name'].toString().toLowerCase() == country.toLowerCase(),
+        orElse: () => {},
       );
       final placeID = location['placeID']?.toString() ?? '';
 
       final newCache = cachedData != null
-          ? jsonDecode(cachedData as String) as Map<String, dynamic>
+          ? jsonDecode(cachedData.toString()) as Map<String, dynamic>
           : <String, dynamic>{};
 
-      newCache[country ?? ''] = placeID;
+      newCache[country] = placeID;
       await pref.setString(AppConstants.placeIDCacheKey, jsonEncode(newCache));
-      print('country ==> $country');
-      print('placeId ==> $placeID');
+      // print('country ==> $country');
+      // print('placeId ==> $placeID');
 
       return placeID;
     } catch (e) {

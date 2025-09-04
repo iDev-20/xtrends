@@ -46,7 +46,7 @@ class TrendCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '#$trend',
+                      trend,
                       style: const TextStyle(
                           color: AppColors.darkBlue,
                           fontSize: 16,

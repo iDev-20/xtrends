@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
           await homeVM.loadLocation();
 
           if (homeVM.currentLocation != null) {
-            await trendsVM.fetchTrends();
+            await trendsVM.fetchTrends(country: homeVM.currentLocation);
           } else {
             debugPrint("No location provided — skipping trends fetch");
           }
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (homeVM.isLoadingLocation || trendsVM.isLoading) {
             return const Center(
               child: LoadingWidget(
-                  message: 'Fetching your location and latest trends...'),
+                  message: 'Fetching latest trends for your location...'),
             );
           }
           return ListView(

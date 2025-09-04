@@ -5,6 +5,7 @@ import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
 import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
+import 'package:xtrends/ux/view_models.dart/trends_view_model.dart';
 
 class HomeGreetingCard extends StatefulWidget {
   const HomeGreetingCard({super.key});
@@ -14,17 +15,11 @@ class HomeGreetingCard extends StatefulWidget {
 }
 
 class _HomeGreetingCardState extends State<HomeGreetingCard> {
-  late HomeViewModel viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   static const supportedCountries = ['Ghana', 'United States', 'Nigeria'];
 
   @override
   Widget build(BuildContext context) {
+    final trendsVM = Provider.of<TrendsViewModel>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Container(
@@ -68,8 +63,10 @@ class _HomeGreetingCardState extends State<HomeGreetingCard> {
                       : null,
                   stringItems: true,
                   items: supportedCountries,
-                  onChanged: (value) {
-                    if (value != null) vm.setLocation(value);
+                  onChanged: (value) async {
+                    if (value == null) return;
+                    vm.setLocation(value);
+                    await trendsVM.fetchTrends(country: value);
                   },
                 ),
               ],
