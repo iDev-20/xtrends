@@ -38,7 +38,7 @@ class TrendsRepository {
           },
           errorMessage: 'Failed to fetch placeID');
 
-      // print("Fetching placeID from: https://${AppConstants.apiHost}/location");
+      print("Fetching placeID from: https://${AppConstants.apiHost}/location");
 
       final locationResult = await networkHelper.getData();
 
@@ -61,8 +61,8 @@ class TrendsRepository {
 
       newCache[country] = placeID;
       await pref.setString(AppConstants.placeIDCacheKey, jsonEncode(newCache));
-      // print('country ==> $country');
-      // print('placeId ==> $placeID');
+      print('country ==> $country');
+      print('placeId ==> $placeID');
 
       return placeID;
     } catch (e) {

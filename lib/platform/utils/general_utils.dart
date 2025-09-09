@@ -16,20 +16,16 @@ class Utils {
 
   static Future<void> openUrl({required String url}) async {
     try {
-      final fixedUrl = url.replaceAll('twitter.com', 'x.com');
+      final fixedUrl = convertToX(url);
 
-      final isTwitter =
-          fixedUrl.contains('x.com') || fixedUrl.contains('twitter.com');
-      Uri? appUri;
-
-      if (isTwitter) {
+      if (fixedUrl.contains('x.com')) {
         final path = fixedUrl.split('.com').last;
-        appUri = Uri.parse("twitter://$path");
-      }
+        final appUri = Uri.parse("twitter://$path");
 
-      if (appUri != null && await canLaunchUrl(appUri)) {
-        await launchUrl(appUri, mode: LaunchMode.externalApplication);
-        return;
+        if (await canLaunchUrl(appUri)) {
+          await launchUrl(appUri, mode: LaunchMode.externalApplication);
+          return;
+        }
       }
 
       final webUri =

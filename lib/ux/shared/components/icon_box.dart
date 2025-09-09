@@ -14,6 +14,7 @@ class IconBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppMaterial(
       onTap: onTap,
+      customBorder: const CircleBorder(),
       child: Ink(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(

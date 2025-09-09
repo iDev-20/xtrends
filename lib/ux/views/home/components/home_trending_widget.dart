@@ -114,14 +114,6 @@ class HomeTrendsCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(
-              (index + 1).toString(),
-              style: const TextStyle(
-                color: AppColors.grey250,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

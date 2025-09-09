@@ -51,9 +51,8 @@ class HomeAppBar extends StatelessWidget {
           IconBox(
             icon: AppImages.svgRefreshIcon,
             onTap: () async {
-              homeVM.resetLocation();
-              await homeVM.loadLocation();
-              await trendsVM.fetchTrends();
+              final selectedCountry = homeVM.currentLocation;
+              await trendsVM.fetchTrends(country: selectedCountry);
             },
           ),
         ],

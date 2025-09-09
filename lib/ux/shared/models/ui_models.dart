@@ -67,6 +67,17 @@ class Trend {
       webUrl: json['webUrl'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'trendName': trendName,
+      'domain': domain,
+      'postCount': postCount,
+      'rank': rank,
+      'mobileIntent': mobileIntent,
+      'webUrl': webUrl,
+    };
+  }
 }
 
 class TrendingResponse {
@@ -99,6 +110,39 @@ class TrendingResponse {
       placeId: trending['placeID'] ?? '',
       locationType: trending['locationType'] ?? '',
       trends: trendsList,
+    );
+  }
+}
+
+class SavedTrend {
+  final List<Trend> trends;
+  final String location;
+  final DateTime savedAt;
+
+  SavedTrend({
+    required this.trends,
+    required this.location,
+    required this.savedAt,
+  });
+
+  String get id => '${location}_${savedAt.microsecondsSinceEpoch}';
+
+  Map<String, dynamic> toJson() {
+    return {
+      'trends': trends.map((t) => t.toJson()).toList(),
+      'location': location,
+      'savedAt': savedAt.toIso8601String(),
+    };
+  }
+
+  factory SavedTrend.fromJson(Map<String, dynamic> json) {
+    final trendsList =
+        (json['trends'] as List? ?? []).map((e) => Trend.fromJson(e)).toList();
+
+    return SavedTrend(
+      trends: trendsList,
+      location: json['location'],
+      savedAt: DateTime.parse(json['savedAt']),
     );
   }
 }

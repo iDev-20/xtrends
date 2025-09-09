@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xtrends/ux/services/networking.dart';
 import 'package:xtrends/ux/services/trends_repository.dart';
 import 'package:xtrends/ux/shared/models/ui_models.dart';
@@ -18,6 +21,26 @@ class TrendsViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final cacheKey = 'trends_cache_${country ?? "default"}';
+
+      // Check if cached trends exist
+      final cachedData = prefs.getString(cacheKey);
+      if (cachedData != null) {
+        final cachedMap = jsonDecode(cachedData) as Map<String, dynamic>;
+        final lastFetched = DateTime.parse(cachedMap['timestamp']);
+
+        // Use cached data if it's less than 10 minutes old
+        if (DateTime.now().difference(lastFetched).inMinutes < 10) {
+          _trends = (cachedMap['trends'] as List)
+              .map((e) => Trend.fromJson(e))
+              .toList();
+          _loading = false;
+          notifyListeners();
+          return;
+        }
+      }
+
       final placeID = await _repo.fetchPlaceID(countryName: country);
 
       NetworkHelper networkHelper = NetworkHelper(
@@ -29,14 +52,23 @@ class TrendsViewModel extends ChangeNotifier {
           },
           errorMessage: 'Failed to fetch trends');
 
-      // print(
-      //     "Fetching trends from: https://${AppConstants.apiHost}/location/$placeID");
+      print(
+          "Fetching trends from: https://${AppConstants.apiHost}/location/$placeID");
 
       final trendsResult = await networkHelper.getData();
 
       if (trendsResult != null) {
         final trendingResponse = TrendingResponse.fromJson(trendsResult);
         _trends = trendingResponse.trends;
+
+        // Save to cache
+        prefs.setString(
+          cacheKey,
+          jsonEncode({
+            'timestamp': DateTime.now().toIso8601String(),
+            'trends': _trends.map((e) => e.toJson()).toList(),
+          }),
+        );
       }
     } catch (e) {
       debugPrint("Error fetching trends: $e");

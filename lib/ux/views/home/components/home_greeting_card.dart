@@ -15,7 +15,12 @@ class HomeGreetingCard extends StatefulWidget {
 }
 
 class _HomeGreetingCardState extends State<HomeGreetingCard> {
-  static const supportedCountries = ['Ghana', 'United States', 'Nigeria'];
+  static const supportedCountries = [
+    'Ghana',
+    'United States',
+    'Nigeria',
+    'France'
+  ];
 
   @override
   Widget build(BuildContext context) {

@@ -9,4 +9,5 @@ class AppConstants {
   static final apiHost = dotenv.env['RAPIDAPI_HOST'];
   static const placeIDCacheKey = 'placeID.cache';
   static const locationKey = 'location';
+  static const savedTrendsKey = 'saved.trends';
 }
