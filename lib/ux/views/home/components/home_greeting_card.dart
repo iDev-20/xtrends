@@ -69,18 +69,19 @@ class _HomeGreetingCardState extends State<HomeGreetingCard> {
                     final locations = locationViewModel.locations;
                     return CustomSearchTextFormField(
                       hintText: 'Search country',
-                      onSubmit: (value) async {
-                        vm.setLocation(value);
-                        await trendsVM.fetchTrends(country: value);
-                      },
                       suggestions: locations
                           .map((location) => SearchFieldListItem<String>(
                               location.name,
                               item: location.name))
                           .toList(),
-                      onSuggestionTap: (value) async {
-                        vm.setLocation(value.searchKey);
-                        await trendsVM.fetchTrends(country: value.searchKey);
+                      onSuggestionTap: (suggestion) async {
+                        vm.setLocation(suggestion.searchKey);
+                        await trendsVM.fetchTrends(
+                            country: suggestion.searchKey);
+                      },
+                      onSubmit: (value) async {
+                        vm.setLocation(value);
+                        await trendsVM.fetchTrends(country: value);
                       },
                     );
                   },

@@ -24,7 +24,7 @@ class TrendDetailsScreen extends StatelessWidget {
               builder: (context, viewModel, _) {
                 final trend = viewModel.trends[index];
                 return TrendDetailsCard(
-                  header: 'Trending in ${trend.domain}',
+                  domain: trend.domain,
                   rank: trend.rank,
                   trendName: Utils.formatTrendName(trend: trend.trendName),
                   noOfTweets:

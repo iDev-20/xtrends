@@ -5,10 +5,10 @@ import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
 
-class TrendDetailsCard extends StatelessWidget {
+class TrendDetailsCard extends StatefulWidget {
   const TrendDetailsCard({
     super.key,
-    required this.header,
+    required this.domain,
     required this.rank,
     required this.trendName,
     required this.noOfTweets,
@@ -16,12 +16,19 @@ class TrendDetailsCard extends StatelessWidget {
     required this.tweetMobileUrl,
   });
 
-  final String header;
+  final String domain;
   final int rank;
   final String trendName;
   final String noOfTweets;
   final String tweetWebUrl;
   final String tweetMobileUrl;
+
+  @override
+  State<TrendDetailsCard> createState() => _TrendDetailsCardState();
+}
+
+class _TrendDetailsCardState extends State<TrendDetailsCard> {
+  bool selected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +45,13 @@ class TrendDetailsCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                header,
-                style: const TextStyle(
-                    color: AppColors.grey250, fontWeight: FontWeight.w600),
+              Visibility(
+                visible: widget.domain.isNotEmpty,
+                child: Text(
+                  'Trending in ${widget.domain}',
+                  style: const TextStyle(
+                      color: AppColors.grey250, fontWeight: FontWeight.w600),
+                ),
               ),
               Container(
                 padding:
@@ -54,7 +64,7 @@ class TrendDetailsCard extends StatelessWidget {
                     AppImages.svgRankIcon,
                     const SizedBox(width: 8),
                     Text(
-                      'Rank $rank',
+                      'Rank ${widget.rank}',
                       style: const TextStyle(
                           color: AppColors.darkBlueText,
                           fontSize: 12,
@@ -67,7 +77,7 @@ class TrendDetailsCard extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            trendName,
+            widget.trendName,
             style: const TextStyle(
                 color: AppColors.darkBlueText,
                 fontSize: 24,
@@ -75,13 +85,13 @@ class TrendDetailsCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            noOfTweets,
+            widget.noOfTweets,
             style: const TextStyle(
                 color: AppColors.grey400, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
           Text(
-            tweetWebUrl,
+            widget.tweetWebUrl,
             style: const TextStyle(
                 color: AppColors.darkBlueText, fontWeight: FontWeight.w500),
           ),
@@ -96,19 +106,23 @@ class TrendDetailsCard extends StatelessWidget {
                 ),
                 action: AppStrings.copy,
                 onTap: () {
-                  final text = Utils.convertToX(tweetWebUrl);
+                  final text = Utils.convertToX(widget.tweetWebUrl);
                   Utils.copyText(text: text);
                 },
               ),
               const SizedBox(width: 10),
               TrendDetailActionButton(
-                icon: const Icon(
-                  Icons.star_border_rounded,
+                icon: Icon(
+                  selected ? Icons.star_rounded : Icons.star_border_rounded,
                   color: AppColors.gold,
                   size: 20,
                 ),
                 action: AppStrings.save,
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    selected = !selected;
+                  });
+                },
               ),
               const SizedBox(width: 10),
               TrendDetailActionButton(
@@ -119,7 +133,7 @@ class TrendDetailsCard extends StatelessWidget {
                 ),
                 action: AppStrings.open,
                 onTap: () async {
-                  await Utils.openUrl(url: tweetMobileUrl);
+                  await Utils.openUrl(url: widget.tweetMobileUrl);
                 },
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xtrends/ux/shared/components/app_page.dart';
 import 'package:xtrends/ux/shared/components/loading_widget.dart';
+import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
 import 'package:xtrends/ux/view_models.dart/trends_view_model.dart';
 import 'package:xtrends/ux/views/home/components/home_greeting_card.dart';
@@ -43,17 +44,24 @@ class _HomeScreenState extends State<HomeScreen> {
       hideAppBar: true,
       body: Consumer2<HomeViewModel, TrendsViewModel>(
         builder: (context, homeVM, trendsVM, _) {
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              const HomeGreetingCard(),
-              Visibility(
-                visible: homeVM.isLoadingLocation || trendsVM.isLoading,
-                replacement: const HomeTrendingWidget(),
-                child: const LoadingWidget(
-                    message: 'Fetching latest trends for your location...'),
-              ),
-            ],
+          return RefreshIndicator(
+            color: AppColors.grey250,
+            onRefresh: () async {
+              final selectedCountry = homeVM.currentLocation;
+              await trendsVM.refreshTrends(country: selectedCountry);
+            },
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                const HomeGreetingCard(),
+                Visibility(
+                  visible: homeVM.isLoadingLocation || trendsVM.isLoading,
+                  replacement: const HomeTrendingWidget(),
+                  child: const LoadingWidget(
+                      message: 'Fetching latest trends for your location...'),
+                ),
+              ],
+            ),
           );
         },
       ),

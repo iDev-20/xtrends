@@ -48,13 +48,13 @@ class SavedTrendCard extends StatelessWidget {
                 ),
               ),
               const IconBox(
+                backgroundColor: AppColors.primary50,
                 icon: Icon(
-                  Icons.star,
+                  Icons.star_rounded,
                   color: AppColors.gold,
                   size: 20,
                 ),
-                backgroundColor: AppColors.primary50,
-              )
+              ),
             ],
           ),
         ),
