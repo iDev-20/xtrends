@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xtrends/ux/shared/components/app_dropdown_field.dart';
+import 'package:searchfield/searchfield.dart';
+import 'package:xtrends/ux/shared/components/app_form_fields.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
 import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
+import 'package:xtrends/ux/view_models.dart/location_view_model.dart';
 import 'package:xtrends/ux/view_models.dart/trends_view_model.dart';
 
 class HomeGreetingCard extends StatefulWidget {
@@ -15,12 +17,13 @@ class HomeGreetingCard extends StatefulWidget {
 }
 
 class _HomeGreetingCardState extends State<HomeGreetingCard> {
-  static const supportedCountries = [
-    'Ghana',
-    'United States',
-    'Nigeria',
-    'France'
-  ];
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<LocationViewModel>().fetchLocations();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +64,25 @@ class _HomeGreetingCardState extends State<HomeGreetingCard> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                CustomAppDropDownField(
-                  labelText: AppStrings.selectLocation,
-                  valueHolder: supportedCountries.contains(vm.currentLocation)
-                      ? vm.currentLocation
-                      : null,
-                  stringItems: true,
-                  items: supportedCountries,
-                  onChanged: (value) async {
-                    if (value == null) return;
-                    vm.setLocation(value);
-                    await trendsVM.fetchTrends(country: value);
+                Consumer<LocationViewModel>(
+                  builder: (context, locationViewModel, _) {
+                    final locations = locationViewModel.locations;
+                    return CustomSearchTextFormField(
+                      hintText: 'Search country',
+                      onSubmit: (value) async {
+                        vm.setLocation(value);
+                        await trendsVM.fetchTrends(country: value);
+                      },
+                      suggestions: locations
+                          .map((location) => SearchFieldListItem<String>(
+                              location.name,
+                              item: location.name))
+                          .toList(),
+                      onSuggestionTap: (value) async {
+                        vm.setLocation(value.searchKey);
+                        await trendsVM.fetchTrends(country: value.searchKey);
+                      },
+                    );
                   },
                 ),
               ],

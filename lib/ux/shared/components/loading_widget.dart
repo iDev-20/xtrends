@@ -14,7 +14,7 @@ class LoadingWidget extends StatelessWidget {
         const CircularProgressIndicator(color: AppColors.primaryColor),
         const SizedBox(height: 16),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 70),
+          padding: const EdgeInsets.symmetric(horizontal: 60),
           child: Text(
             message,
             textAlign: TextAlign.center,

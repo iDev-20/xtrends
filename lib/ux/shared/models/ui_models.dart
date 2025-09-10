@@ -38,6 +38,14 @@ class TrendLocation {
       locationType: json['locationType'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'placeID': placeID,
+      'locationType': locationType,
+    };
+  }
 }
 
 class Trend {
@@ -70,7 +78,7 @@ class Trend {
 
   Map<String, dynamic> toJson() {
     return {
-      'trendName': trendName,
+      'name': trendName,
       'domain': domain,
       'postCount': postCount,
       'rank': rank,

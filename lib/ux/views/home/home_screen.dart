@@ -43,17 +43,16 @@ class _HomeScreenState extends State<HomeScreen> {
       hideAppBar: true,
       body: Consumer2<HomeViewModel, TrendsViewModel>(
         builder: (context, homeVM, trendsVM, _) {
-          if (homeVM.isLoadingLocation || trendsVM.isLoading) {
-            return const Center(
-              child: LoadingWidget(
-                  message: 'Fetching latest trends for your location...'),
-            );
-          }
           return ListView(
             padding: const EdgeInsets.all(16),
-            children: const [
-              HomeGreetingCard(),
-              HomeTrendingWidget(),
+            children: [
+              const HomeGreetingCard(),
+              Visibility(
+                visible: homeVM.isLoadingLocation || trendsVM.isLoading,
+                replacement: const HomeTrendingWidget(),
+                child: const LoadingWidget(
+                    message: 'Fetching latest trends for your location...'),
+              ),
             ],
           );
         },

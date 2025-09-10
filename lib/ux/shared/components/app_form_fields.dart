@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:searchfield/searchfield.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
@@ -151,14 +152,14 @@ class _CustomAppTextFormFieldState extends State<CustomAppTextFormField> {
   }
 }
 
-class CustomSearchTextFormField extends StatelessWidget {
+class CustomSearchTextFormField extends StatefulWidget {
   final TextEditingController? controller;
   final String? labelText;
   final String? hintText;
   final Widget? prefixWidget;
   final Widget? suffixWidget;
-  final void Function(String)? onChanged;
-  final void Function(String)? onSubmitted;
+  final void Function(SearchFieldListItem<dynamic>)? onSuggestionTap;
+  final void Function(String)? onSubmit;
   final void Function()? onTap;
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
@@ -168,42 +169,91 @@ class CustomSearchTextFormField extends StatelessWidget {
   final bool? obscureText;
   final bool autofocus;
   final bool enabled;
+  final List<SearchFieldListItem<dynamic>> suggestions;
+  final void Function(String)? onSuggestionSelected;
+  final SearchFieldListItem<dynamic>? initialValue;
 
-  const CustomSearchTextFormField({
-    super.key,
-    this.controller,
-    this.labelText = '',
-    this.hintText = '',
-    this.prefixWidget,
-    this.suffixWidget,
-    this.onChanged,
-    this.validator,
-    this.inputFormatters,
-    this.keyboardType,
-    this.maxLines = 1,
-    this.autofocus = false,
-    this.maxLength,
-    this.obscureText,
-    this.onTap,
-    this.onSubmitted,
-    this.enabled = true,
-  });
+  const CustomSearchTextFormField(
+      {super.key,
+      this.controller,
+      this.labelText = '',
+      this.hintText = '',
+      this.prefixWidget,
+      this.suffixWidget,
+      this.onSuggestionTap,
+      this.validator,
+      this.inputFormatters,
+      this.keyboardType,
+      this.maxLines = 1,
+      this.autofocus = false,
+      this.maxLength,
+      this.obscureText,
+      this.onTap,
+      this.onSubmit,
+      this.enabled = true,
+      required this.suggestions,
+      this.onSuggestionSelected,
+      this.initialValue});
+
+  @override
+  State<CustomSearchTextFormField> createState() =>
+      _CustomSearchTextFormFieldState();
+}
+
+class _CustomSearchTextFormFieldState extends State<CustomSearchTextFormField> {
+  late FocusNode focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode = FocusNode()
+      ..addListener(() {
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isFocused = focusNode.hasFocus;
+
     return Container(
-      height: 52,
       decoration: BoxDecoration(
-        color: AppColors.grey,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: TextField(
-        autofocus: autofocus,
-        cursorColor: AppColors.primaryColor,
-        decoration: InputDecoration(
+          color: AppColors.grey100,
+          borderRadius: isFocused
+              ? const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                )
+              : BorderRadius.circular(10)),
+      child: SearchField(
+        initialValue: widget.initialValue,
+        focusNode: focusNode,
+        suggestions: widget.suggestions,
+        onSuggestionTap: (suggestion) {
+          widget.onSuggestionTap?.call(suggestion);
+          focusNode.unfocus();
+        },
+        autofocus: widget.autofocus,
+        suggestionsDecoration: SuggestionDecoration(
+          color: AppColors.grey100,
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
+        ),
+        onSubmit: widget.onSubmit,
+        searchStyle: const TextStyle(
+            fontFamily: 'PlusJakartaSans', color: AppColors.darkBlueText),
+        searchInputDecoration: InputDecoration(
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
-          hintText: hintText ?? AppStrings.searchHintText,
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          hintText: widget.hintText ?? AppStrings.searchHintText,
           hintStyle: const TextStyle(
             color: AppColors.grey200,
             fontSize: 14,
@@ -215,17 +265,14 @@ class CustomSearchTextFormField extends StatelessWidget {
           suffixIconConstraints:
               const BoxConstraints(maxHeight: 36, maxWidth: 36),
           prefixIcon: Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(6),
             child: AppImages.svgSearchIcon,
           ),
         ),
-        inputFormatters: inputFormatters,
-        keyboardType: TextInputType.text,
-        controller: controller,
-        onChanged: onChanged,
-        onSubmitted: onSubmitted,
-        textInputAction: TextInputAction.search,
         textCapitalization: TextCapitalization.sentences,
+        inputFormatters: widget.inputFormatters,
+        controller: widget.controller,
+        textInputAction: TextInputAction.search,
       ),
     );
   }

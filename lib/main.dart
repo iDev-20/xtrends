@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
+import 'package:xtrends/ux/view_models.dart/location_view_model.dart';
 import 'package:xtrends/ux/view_models.dart/trends_view_model.dart';
 import 'package:xtrends/ux/view_models.dart/user_name_view_model.dart';
 import 'package:xtrends/ux/views/splash_screen.dart';
@@ -18,6 +19,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => UserNameViewModel()),
         ChangeNotifierProvider(create: (context) => HomeViewModel(pref: pref)),
         ChangeNotifierProvider(create: (context) => TrendsViewModel()),
+        ChangeNotifierProvider(create: (context) => LocationViewModel()),
       ],
       child: const MyApp(),
     ),

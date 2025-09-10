@@ -36,8 +36,7 @@ class HomeTrendingWidget extends StatelessWidget {
           ),
           Consumer<TrendsViewModel>(builder: (context, vm, _) {
             if (vm.isLoading) {
-              return const Padding(
-                padding: EdgeInsets.all(16),
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -118,10 +117,13 @@ class HomeTrendsCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    category,
-                    style: const TextStyle(
-                      color: AppColors.grey300,
+                  Visibility(
+                    visible: category.isNotEmpty,
+                    child: Text(
+                      category,
+                      style: const TextStyle(
+                        color: AppColors.grey300,
+                      ),
                     ),
                   ),
                   Text(
