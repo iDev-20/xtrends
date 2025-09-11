@@ -22,8 +22,7 @@ class HomeViewModel extends ChangeNotifier {
     if (_isLocationLoaded) return;
     if (_currentLocation != null) return;
 
-    _loadingLocation = true;
-    notifyListeners();
+    setLoadingState(true);
 
     try {
       _currentLocation = pref.get(AppConstants.locationKey) as String?;
@@ -38,9 +37,13 @@ class HomeViewModel extends ChangeNotifier {
     } catch (e) {
       debugPrint("Error loading location: $e");
     } finally {
-      _loadingLocation = false;
-      notifyListeners();
+      setLoadingState(false);
     }
+  }
+
+  void setLoadingState(bool loading) {
+    _loadingLocation = loading;
+    notifyListeners();
   }
 
   void setLocation(String value) {

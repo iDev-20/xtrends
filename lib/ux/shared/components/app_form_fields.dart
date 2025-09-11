@@ -241,7 +241,7 @@ class _CustomSearchTextFormFieldState extends State<CustomSearchTextFormField> {
         },
         autofocus: widget.autofocus,
         suggestionsDecoration: SuggestionDecoration(
-          color: AppColors.grey100,
+          color: AppColors.white,
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(10),
             bottomRight: Radius.circular(10),

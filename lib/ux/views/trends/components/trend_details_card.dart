@@ -45,13 +45,12 @@ class _TrendDetailsCardState extends State<TrendDetailsCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Visibility(
-                visible: widget.domain.isNotEmpty,
-                child: Text(
-                  'Trending in ${widget.domain}',
-                  style: const TextStyle(
-                      color: AppColors.grey250, fontWeight: FontWeight.w600),
-                ),
+              Text(
+                widget.domain.isNotEmpty
+                    ? 'Trending in ${widget.domain}'
+                    : 'Trending now',
+                style: const TextStyle(
+                    color: AppColors.grey250, fontWeight: FontWeight.w600),
               ),
               Container(
                 padding:
@@ -75,7 +74,7 @@ class _TrendDetailsCardState extends State<TrendDetailsCard> {
               )
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           Text(
             widget.trendName,
             style: const TextStyle(
