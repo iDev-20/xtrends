@@ -44,6 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
       hideAppBar: true,
       body: Consumer2<HomeViewModel, TrendsViewModel>(
         builder: (context, homeVM, trendsVM, _) {
+          final isLoading = homeVM.isLoadingLocation || trendsVM.isLoading;
+
           return RefreshIndicator(
             color: AppColors.grey250,
             onRefresh: () async {
@@ -54,12 +56,15 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(16),
               children: [
                 const HomeGreetingCard(),
-                Visibility(
-                  visible: homeVM.isLoadingLocation || trendsVM.isLoading,
-                  replacement: const HomeTrendingWidget(),
-                  child: const LoadingWidget(
-                      message: 'Fetching latest trends for your location...'),
-                ),
+                if (isLoading)
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    child: const LoadingWidget(
+                      message: 'Fetching latest trends for your location...',
+                    ),
+                  )
+                else
+                  const HomeTrendingWidget(),
               ],
             ),
           );

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:xtrends/platform/extensions/string_extensions.dart';
 import 'package:xtrends/platform/utils/general_utils.dart';
 import 'package:xtrends/ux/shared/components/loading_widget.dart';
+import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
 import 'package:xtrends/ux/view_models.dart/trends_view_model.dart';
 import 'package:xtrends/ux/views/trends/components/trend_card.dart';
@@ -24,18 +25,26 @@ class _TrendsScreenState extends State<TrendsScreen> {
               message: 'Fetching latest trends for your location...');
         }
 
-        return ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: viewModel.trends.length,
-          itemBuilder: (context, index) {
-            final trend = viewModel.trends[index];
-            return TrendCard(
-              index: index,
-              trend: Utils.formatTrendName(trend: trend.trendName),
-              noOfTweets:
-                  '${StringExtension.toTweetCount(trend.postCount)} Tweets',
-            );
+        return RefreshIndicator(
+          color: AppColors.grey250,
+          onRefresh: () async {
+            final selectedCountry = homeVM.currentLocation;
+            await viewModel.refreshTrends(country: selectedCountry);
+            // return Future.value();
           },
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: viewModel.trends.length,
+            itemBuilder: (context, index) {
+              final trend = viewModel.trends[index];
+              return TrendCard(
+                index: index,
+                trend: Utils.formatTrendName(trend: trend.trendName),
+                noOfTweets:
+                    '${StringExtension.toTweetCount(trend.postCount)} Tweets',
+              );
+            },
+          ),
         );
       },
     );
