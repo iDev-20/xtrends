@@ -4,43 +4,75 @@ import 'package:xtrends/ux/shared/models/ui_models.dart';
 import 'package:xtrends/ux/view_models.dart/location_view_model.dart';
 
 class TrendsRepository {
-  final LocationViewModel _locationsViewModel = LocationViewModel();
+  final LocationViewModel locationsViewModel = LocationViewModel();
 
   Future<String> fetchPlaceID({String? countryName}) async {
     try {
-      final country = countryName ?? await LocationService().getCountryName();
+      final country = await resolveCountryName(countryName);
 
-      if (country == null || country.isEmpty) {
-        debugPrint("No country name found");
-        return '';
+      if (isInvalidCountry(country)) {
+        return handleNoCountryFound();
       }
 
-      if (_locationsViewModel.locations.isEmpty) {
-        await _locationsViewModel.fetchLocations();
-      }
+      await ensureLocationsLoaded();
 
-      final location = _locationsViewModel.findLocationByName(country);
-
-      if (location != null) {
-        debugPrint("Place ID found for $country: ${location.placeID}");
-        return location.placeID;
-      } else {
-        debugPrint("No location found for country: $country");
-        debugPrint(
-            "Available locations: ${_locationsViewModel.locations.map((l) => l.name).join(', ')}");
-        return '';
-      }
+      return findPlaceIDForCountry(country ?? '');
     } catch (e) {
-      debugPrint("Error fetching placeID: $e");
-      return 'error';
+      return handleFetchError(e);
     }
   }
 
-  /// Get all available locations
-  Future<List<TrendLocation>> getAvailableLocations() async {
-    if (_locationsViewModel.locations.isEmpty) {
-      await _locationsViewModel.fetchLocations();
+  Future<String?> resolveCountryName(String? countryName) async {
+    return countryName ?? await LocationService().getCountryName();
+  }
+
+  bool isInvalidCountry(String? country) {
+    return country == null || country.isEmpty;
+  }
+
+  String handleNoCountryFound() {
+    debugPrint('No country name found');
+    return '';
+  }
+
+  Future<void> ensureLocationsLoaded() async {
+    if (locationsViewModel.locations.isEmpty) {
+      await locationsViewModel.fetchLocations();
     }
-    return _locationsViewModel.locations;
+  }
+
+  String findPlaceIDForCountry(String country) {
+    final location = locationsViewModel.findLocationByName(country);
+
+    return location != null
+        ? handleLocationFound(country, location)
+        : handleLocationNotFound(country);
+  }
+
+  String handleLocationFound(String country, TrendLocation location) {
+    debugPrint('Place ID found for $country: ${location.placeID}');
+    return location.placeID;
+  }
+
+  String handleLocationNotFound(String country) {
+    debugPrint('No location found for country $country');
+    logAvailableLocations();
+    return '';
+  }
+
+  void logAvailableLocations() {
+    final availableLocations =
+        locationsViewModel.locations.map((loc) => loc.name).join(', ');
+    debugPrint('Available locations: $availableLocations');
+  }
+
+  String handleFetchError(dynamic error) {
+    debugPrint('Error fetching placeID: $error');
+    return '';
+  }
+
+  Future<List<TrendLocation>> getAvailableLocations() async {
+    await ensureLocationsLoaded();
+    return locationsViewModel.locations;
   }
 }
