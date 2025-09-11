@@ -17,7 +17,6 @@ class TrendsViewModel extends ChangeNotifier {
   bool get isLoading => _loading;
 
   Future<void> fetchTrends({String? country}) async {
-    debugPrint('You called me');
     setLoadingState(true);
 
     try {
@@ -129,7 +128,6 @@ class TrendsViewModel extends ChangeNotifier {
 
   Future<void> fetchFreshTrends(String? country, String cacheKey) async {
     try {
-      //TODO: confirm that this works properly
       if (await hasCachedTrends(country)) {
         await clearCache(country: country);
       }

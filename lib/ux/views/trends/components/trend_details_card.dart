@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:xtrends/platform/utils/general_utils.dart';
-import 'package:xtrends/ux/shared/components/app_material.dart';
+import 'package:provider/provider.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_images.dart';
-import 'package:xtrends/ux/shared/resources/app_strings.dart';
+import 'package:xtrends/ux/view_models.dart/saved_trends_view_model.dart';
+import 'package:xtrends/ux/views/trends/components/trend_detail_action_buttons.dart';
 
 class TrendDetailsCard extends StatefulWidget {
   const TrendDetailsCard({
@@ -14,6 +14,7 @@ class TrendDetailsCard extends StatefulWidget {
     required this.noOfTweets,
     required this.tweetWebUrl,
     required this.tweetMobileUrl,
+    this.savedAt,
   });
 
   final String domain;
@@ -22,14 +23,13 @@ class TrendDetailsCard extends StatefulWidget {
   final String noOfTweets;
   final String tweetWebUrl;
   final String tweetMobileUrl;
+  final DateTime? savedAt;
 
   @override
   State<TrendDetailsCard> createState() => _TrendDetailsCardState();
 }
 
 class _TrendDetailsCardState extends State<TrendDetailsCard> {
-  bool selected = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,12 +45,28 @@ class _TrendDetailsCardState extends State<TrendDetailsCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                widget.domain.isNotEmpty
-                    ? 'Trending in ${widget.domain}'
-                    : 'Trending now',
-                style: const TextStyle(
-                    color: AppColors.grey250, fontWeight: FontWeight.w600),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.domain.isNotEmpty
+                        ? 'Trending in ${widget.domain}'
+                        : 'Trending now',
+                    style: const TextStyle(
+                        color: AppColors.grey250, fontWeight: FontWeight.w600),
+                  ),
+                  if (widget.savedAt != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      Provider.of<SavedTrendsViewModel>(context, listen: false)
+                          .formatSavedTime(widget.savedAt ?? DateTime.now()),
+                      style: const TextStyle(
+                          color: AppColors.grey250,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ],
               ),
               Container(
                 padding:
@@ -95,87 +111,8 @@ class _TrendDetailsCardState extends State<TrendDetailsCard> {
                 color: AppColors.darkBlueText, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              TrendDetailActionButton(
-                icon: const Icon(
-                  Icons.copy_rounded,
-                  color: AppColors.darkBlue,
-                  size: 20,
-                ),
-                action: AppStrings.copy,
-                onTap: () {
-                  final text = Utils.convertToX(widget.tweetWebUrl);
-                  Utils.copyText(text: text);
-                },
-              ),
-              const SizedBox(width: 10),
-              TrendDetailActionButton(
-                icon: Icon(
-                  selected ? Icons.star_rounded : Icons.star_border_rounded,
-                  color: AppColors.gold,
-                  size: 20,
-                ),
-                action: AppStrings.save,
-                onTap: () {
-                  setState(() {
-                    selected = !selected;
-                  });
-                },
-              ),
-              const SizedBox(width: 10),
-              TrendDetailActionButton(
-                icon: SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: Image(image: AppImages.xLogo),
-                ),
-                action: AppStrings.open,
-                onTap: () async {
-                  await Utils.openUrl(url: widget.tweetMobileUrl);
-                },
-              ),
-            ],
-          ),
+          TrendDetailsActionButtons(trendDetails: widget),
         ],
-      ),
-    );
-  }
-}
-
-class TrendDetailActionButton extends StatelessWidget {
-  const TrendDetailActionButton(
-      {super.key,
-      required this.icon,
-      required this.action,
-      required this.onTap});
-
-  final Widget icon;
-  final String action;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: AppMaterial(
-        color: AppColors.grey100,
-        borderRadius: BorderRadius.circular(8),
-        inkwellBorderRadius: BorderRadius.circular(8),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              icon,
-              Text(
-                action,
-                style: const TextStyle(
-                    color: AppColors.darkBlueText, fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-        ),
       ),
     );
   }

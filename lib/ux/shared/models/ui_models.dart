@@ -123,34 +123,62 @@ class TrendingResponse {
 }
 
 class SavedTrend {
-  final List<Trend> trends;
-  final String location;
+  final String id;
+  final String trendName;
+  final String domain;
+  final int rank;
+  final String noOfTweets;
+  final String tweetWebUrl;
+  final String tweetMobileUrl;
   final DateTime savedAt;
 
   SavedTrend({
-    required this.trends,
-    required this.location,
+    required this.id,
+    required this.trendName,
+    required this.domain,
+    required this.rank,
+    required this.noOfTweets,
+    required this.tweetWebUrl,
+    required this.tweetMobileUrl,
     required this.savedAt,
   });
 
-  String get id => '${location}_${savedAt.microsecondsSinceEpoch}';
+  factory SavedTrend.fromJson(Map<String, dynamic> json) {
+    return SavedTrend(
+      id: json['id'] ?? '',
+      trendName: json['trendName'] ?? '',
+      domain: json['domain'] ?? '',
+      rank: json['rank'] ?? 0,
+      noOfTweets: json['noOfTweets'] ?? '',
+      tweetWebUrl: json['tweetWebUrl'] ?? '',
+      tweetMobileUrl: json['tweetMobileUrl'] ?? '',
+      savedAt:
+          DateTime.parse(json['savedAt'] ?? DateTime.now().toIso8601String()),
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
-      'trends': trends.map((t) => t.toJson()).toList(),
-      'location': location,
+      'id': id,
+      'domain': domain,
+      'rank': rank,
+      'trendName': trendName,
+      'noOfTweets': noOfTweets,
+      'tweetWebUrl': tweetWebUrl,
+      'tweetMobileUrl': tweetMobileUrl,
       'savedAt': savedAt.toIso8601String(),
     };
   }
 
-  factory SavedTrend.fromJson(Map<String, dynamic> json) {
-    final trendsList =
-        (json['trends'] as List? ?? []).map((e) => Trend.fromJson(e)).toList();
+  static String generateId(String trendName, String domain) {
+    return '${trendName.toLowerCase()}_${domain.toLowerCase()}_${DateTime.now().millisecondsSinceEpoch}';
+  }
 
-    return SavedTrend(
-      trends: trendsList,
-      location: json['location'],
-      savedAt: DateTime.parse(json['savedAt']),
-    );
+  @override
+  String toString() {
+    return 'SavedTrend(id: $id, trendName: $trendName, domain: $domain, '
+        'rank: $rank, noOfTweets: $noOfTweets, '
+        'tweetWebUrl: $tweetWebUrl, tweetMobileUrl: $tweetMobileUrl, '
+        'savedAt: $savedAt)';
   }
 }
