@@ -133,6 +133,7 @@ class TrendsViewModel extends ChangeNotifier {
     try {
       if (await hasCachedTrends(country)) {
         await clearCache(country: country);
+        debugPrint('Cleared Cache for $country');
       }
 
       final placeID = await getValidPlaceID(country);

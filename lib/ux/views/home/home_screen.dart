@@ -92,31 +92,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildContent(HomeViewModel homeVM, TrendsViewModel trendsVM) {
-    //show loading during initial load or when both location and trends are loading
     if (!initialLoadComplete || shouldShowLoading(homeVM, trendsVM)) {
       return buildLoadingState(homeVM, trendsVM);
     }
 
-    // Show content when data is available
     return const HomeTrendingWidget();
   }
 
   bool shouldShowLoading(HomeViewModel homeVM, TrendsViewModel trendsVM) {
-    // Show loading if:
-    // 1. Location is loading and we don't have any cached location
-    // 2. Trends are loading and we don't have any location yet
-    // 3. Both are loading during a refresh
-
     final hasNoLocation = !homeVM.hasLocation;
     final isLocationLoading = homeVM.isLoadingLocation;
     final isTrendsLoading = trendsVM.isLoading;
 
-    // During initial load - show loading if no location yet
     if (hasNoLocation && isLocationLoading) {
       return true;
     }
 
-    // Show loading if trends are loading and we don't have cached trends
     if (isTrendsLoading && trendsVM.trends.isEmpty) {
       return true;
     }

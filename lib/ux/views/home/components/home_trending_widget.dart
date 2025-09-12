@@ -7,6 +7,7 @@ import 'package:xtrends/ux/shared/resources/app_colors.dart';
 import 'package:xtrends/ux/shared/resources/app_strings.dart';
 import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
 import 'package:xtrends/ux/view_models.dart/trends_view_model.dart';
+import 'package:xtrends/ux/views/home/components/home_trends_card_shimmer.dart';
 import 'package:xtrends/ux/views/trends/trend_details_screen.dart';
 
 class HomeTrendingWidget extends StatelessWidget {
@@ -36,8 +37,13 @@ class HomeTrendingWidget extends StatelessWidget {
           ),
           Consumer<TrendsViewModel>(builder: (context, vm, _) {
             if (vm.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Column(
+                children: List.generate(
+                  10,
+                  (index) {
+                    return const HomeTrendsCardShimmer();
+                  },
+                ),
               );
             }
 
