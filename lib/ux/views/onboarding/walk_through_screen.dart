@@ -56,142 +56,148 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
   @override
   Widget build(BuildContext context) {
     bool isLastPage = _currentPage == 2;
-    return Scaffold(
-      backgroundColor:
-          _currentPage == 1 ? AppColors.primary50 : AppColors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 64),
-            Expanded(
-              child: PageView.builder(
-                padEnds: false,
-                scrollDirection: Axis.horizontal,
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                itemCount: _slideList.length,
-                itemBuilder: (context, index) => GestureDetector(
-                  onTap: () {
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        backgroundColor:
+            _currentPage == 1 ? AppColors.primary50 : AppColors.white,
+        body: SafeArea(
+          child: Column(
+            children: [
+              const SizedBox(height: 64),
+              Expanded(
+                child: PageView.builder(
+                  padEnds: false,
+                  scrollDirection: Axis.horizontal,
+                  controller: _pageController,
+                  onPageChanged: (index) {
                     setState(() {
-                      userControl = true;
+                      _currentPage = index;
                     });
                   },
-                  onHorizontalDragUpdate: (drag) {
-                    setState(() {
-                      userControl = true;
-                    });
+                  itemCount: _slideList.length,
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        userControl = true;
+                      });
+                    },
+                    onHorizontalDragUpdate: (drag) {
+                      setState(() {
+                        userControl = true;
+                      });
 
-                    if (drag.primaryDelta! < 0) {
-                      if (_currentPage != _slideList.length - 1) {
-                        _pageController.nextPage(
-                          duration: _slideAnimationDuration,
-                          curve: Curves.easeIn,
-                        );
+                      if (drag.primaryDelta! < 0) {
+                        if (_currentPage != _slideList.length - 1) {
+                          _pageController.nextPage(
+                            duration: _slideAnimationDuration,
+                            curve: Curves.easeIn,
+                          );
+                        }
+                      } else {
+                        if (_currentPage != 0) {
+                          _pageController.previousPage(
+                            duration: _slideAnimationDuration,
+                            curve: Curves.easeIn,
+                          );
+                        }
                       }
-                    } else {
-                      if (_currentPage != 0) {
-                        _pageController.previousPage(
-                          duration: _slideAnimationDuration,
-                          curve: Curves.easeIn,
-                        );
-                      }
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        _slideList[index].image,
-                        SizedBox(height: _currentPage == 0 ? 14 : 0),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 18),
-                          child: Text(
-                            _slideList[index].title,
-                            style: const TextStyle(
-                                color: AppColors.darkBlueText,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            _slideList[index].subtitle,
-                            style: const TextStyle(
-                                color: AppColors.grey200,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                height: 1.5),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        if (isLastPage)
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          _slideList[index].image,
+                          SizedBox(height: _currentPage == 0 ? 14 : 0),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: CustomAppTextFormField(
-                              hintText: AppStrings.firstName,
-                              keyboardType: TextInputType.name,
-                              textCapitalization: TextCapitalization.words,
-                              textInputAction: TextInputAction.done,
-                              onChanged: (value) {
-                                viewModel.updateFirstName(value);
-                              },
+                            child: Text(
+                              _slideList[index].title,
+                              style: const TextStyle(
+                                  color: AppColors.darkBlueText,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                      ],
+                          const SizedBox(height: 8),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              _slideList[index].subtitle,
+                              style: const TextStyle(
+                                  color: AppColors.grey200,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.5),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          if (isLastPage)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18),
+                              child: CustomAppTextFormField(
+                                hintText: AppStrings.firstName,
+                                keyboardType: TextInputType.name,
+                                textCapitalization: TextCapitalization.words,
+                                textInputAction: TextInputAction.done,
+                                onChanged: (value) {
+                                  viewModel.updateFirstName(value);
+                                },
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Column(
-              children: [
-                SlideIndicator(
-                    selectedIndex: _currentPage, slideList: _slideList),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                  child: Consumer<UserNameViewModel>(
-                    builder: (context, vm, _) {
-                      return CustomAppButton(
-                        enabled: enableButton(),
-                        onTap: () async {
-                          if (isLastPage) {
-                            vm.saveFirstNameToCache();
-                            await SharedPref.setOnboardingComplete();
-                            if (mounted) {
-                              Navigation.navigateToScreen(
-                                context: context,
-                                screen: const NavigationHostPage(),
+              Column(
+                children: [
+                  SlideIndicator(
+                      selectedIndex: _currentPage, slideList: _slideList),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 24),
+                    child: Consumer<UserNameViewModel>(
+                      builder: (context, vm, _) {
+                        return CustomAppButton(
+                          enabled: enableButton(),
+                          onTap: () async {
+                            if (isLastPage) {
+                              vm.saveFirstNameToCache();
+                              await SharedPref.setOnboardingComplete();
+                              if (mounted) {
+                                Navigation.navigateToScreen(
+                                  context: context,
+                                  screen: const NavigationHostPage(),
+                                );
+                              }
+                            } else {
+                              _pageController.nextPage(
+                                duration: _slideAnimationDuration,
+                                curve: Curves.easeIn,
                               );
                             }
-                          } else {
-                            _pageController.nextPage(
-                              duration: _slideAnimationDuration,
-                              curve: Curves.easeIn,
-                            );
-                          }
-                        },
-                        foregroundColor: Colors.white,
-                        child: Text(isLastPage
-                            ? AppStrings.continueText
-                            : AppStrings.next),
-                      );
-                    },
+                          },
+                          foregroundColor: Colors.white,
+                          child: Text(isLastPage
+                              ? AppStrings.continueText
+                              : AppStrings.next),
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

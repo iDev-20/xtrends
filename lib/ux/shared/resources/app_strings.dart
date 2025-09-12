@@ -59,4 +59,9 @@ class AppStrings {
   static const privacy = 'Privacy';
   static const privacyDetails =
       'We respect your privacy. No personal data is collected or stored. Your location is used solely to display relevant trends and is not shared with third parties.';
+
+      static const gettingYourLocation = 'Getting your location...';
+      static const fetchingLatestTrendsFor = 'Fetching latest trends for';
+      static const fetchingLatestTrends = 'Fetching latest trends...';
+      static const loading = 'Loading...';
 }

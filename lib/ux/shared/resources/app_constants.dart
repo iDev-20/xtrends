@@ -11,4 +11,5 @@ class AppConstants {
   static const locationKey = 'location';
   static const locationCacheKey = 'location.cache.key';
   static const savedTrendsKey = 'saved.trends';
+  static const lastLocationFetchKey = 'last.location.fetch';
 }

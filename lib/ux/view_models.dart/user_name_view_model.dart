@@ -15,5 +15,5 @@ class UserNameViewModel extends ChangeNotifier {
     await pref.setString(AppConstants.firstNameKey, firstName);
   }
 
-  bool get isButtonEnabled => firstName.isNotEmpty;
+  bool get isButtonEnabled => firstName.isNotEmpty && firstName.length > 1;
 }

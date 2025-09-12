@@ -95,16 +95,19 @@ class TrendsViewModel extends ChangeNotifier {
     switch (strategy) {
       case CacheStrategy.fetchFreshOnly:
         await fetchFreshTrends(country, cacheKey);
+        debugPrint('Using fetch fresh only');
         break;
 
       case CacheStrategy.cachedOnly:
         await loadCachedTrends(cacheKey);
         setLoadingState(false);
+        debugPrint('Using cached only');
         break;
 
       case CacheStrategy.showCachedThenFetch:
         await loadCachedTrends(cacheKey);
         await fetchFreshTrends(country, cacheKey);
+        debugPrint('Using show cached then fetch');
         break;
     }
   }

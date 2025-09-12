@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:xtrends/ux/shared/components/app_page.dart';
 import 'package:xtrends/ux/shared/components/loading_widget.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
+import 'package:xtrends/ux/shared/resources/app_strings.dart';
 import 'package:xtrends/ux/view_models.dart/home_view_model.dart';
 import 'package:xtrends/ux/view_models.dart/trends_view_model.dart';
 import 'package:xtrends/ux/views/home/components/home_greeting_card.dart';
@@ -16,26 +17,56 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool initialLoadComplete = false;
+
   @override
   void initState() {
     super.initState();
+    initializeData();
+  }
 
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        final homeVM = Provider.of<HomeViewModel>(context, listen: false);
-        final trendsVM = Provider.of<TrendsViewModel>(context, listen: false);
+  Future<void> initializeData() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await loadLocationsAndTrends();
+    });
+  }
 
-        if (!homeVM.isLocationLoaded) {
-          await homeVM.loadLocation();
+  Future<void> loadLocationsAndTrends() async {
+    final homeVM = Provider.of<HomeViewModel>(context, listen: false);
+    final trendsVM = Provider.of<TrendsViewModel>(context, listen: false);
 
-          if (homeVM.currentLocation != null) {
-            await trendsVM.fetchTrends(country: homeVM.currentLocation);
-          } else {
-            debugPrint("No location provided — skipping trends fetch");
-          }
-        }
-      },
-    );
+    try {
+      await homeVM.loadLocation();
+
+      if (homeVM.hasLocation) {
+        await trendsVM.fetchTrends(country: homeVM.currentLocation);
+      } else {
+        debugPrint('No location available - skipping trends fetch');
+      }
+    } catch (e) {
+      debugPrint('Error during initialization: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          initialLoadComplete = true;
+        });
+      }
+    }
+  }
+
+  Future<void> onRefresh() async {
+    final homeVM = Provider.of<HomeViewModel>(context, listen: false);
+    final trendsVM = Provider.of<TrendsViewModel>(context, listen: false);
+
+    try {
+      await homeVM.refreshLocation();
+
+      if (homeVM.hasLocation) {
+        await trendsVM.refreshTrends(country: homeVM.currentLocation);
+      }
+    } catch (e) {
+      debugPrint("Error during refresh: $e");
+    }
   }
 
   @override
@@ -44,32 +75,75 @@ class _HomeScreenState extends State<HomeScreen> {
       hideAppBar: true,
       body: Consumer2<HomeViewModel, TrendsViewModel>(
         builder: (context, homeVM, trendsVM, _) {
-          final isLoading = homeVM.isLoadingLocation || trendsVM.isLoading;
-
           return RefreshIndicator(
             color: AppColors.grey250,
-            onRefresh: () async {
-              final selectedCountry = homeVM.currentLocation;
-              await trendsVM.refreshTrends(country: selectedCountry);
-            },
+            onRefresh: onRefresh,
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 const HomeGreetingCard(),
-                if (isLoading)
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.55,
-                    child: const LoadingWidget(
-                      message: 'Fetching latest trends for your location...',
-                    ),
-                  )
-                else
-                  const HomeTrendingWidget(),
+                buildContent(homeVM, trendsVM),
               ],
             ),
           );
         },
       ),
     );
+  }
+
+  Widget buildContent(HomeViewModel homeVM, TrendsViewModel trendsVM) {
+    //show loading during initial load or when both location and trends are loading
+    if (!initialLoadComplete || shouldShowLoading(homeVM, trendsVM)) {
+      return buildLoadingState(homeVM, trendsVM);
+    }
+
+    // Show content when data is available
+    return const HomeTrendingWidget();
+  }
+
+  bool shouldShowLoading(HomeViewModel homeVM, TrendsViewModel trendsVM) {
+    // Show loading if:
+    // 1. Location is loading and we don't have any cached location
+    // 2. Trends are loading and we don't have any location yet
+    // 3. Both are loading during a refresh
+
+    final hasNoLocation = !homeVM.hasLocation;
+    final isLocationLoading = homeVM.isLoadingLocation;
+    final isTrendsLoading = trendsVM.isLoading;
+
+    // During initial load - show loading if no location yet
+    if (hasNoLocation && isLocationLoading) {
+      return true;
+    }
+
+    // Show loading if trends are loading and we don't have cached trends
+    if (isTrendsLoading && trendsVM.trends.isEmpty) {
+      return true;
+    }
+
+    return false;
+  }
+
+  Widget buildLoadingState(HomeViewModel homeVM, TrendsViewModel trendsVM) {
+    String message = getLoadingMessage(homeVM, trendsVM);
+
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.55,
+      child: LoadingWidget(message: message),
+    );
+  }
+
+  String getLoadingMessage(HomeViewModel homeVM, TrendsViewModel trendsVM) {
+    if (homeVM.isLoadingLocation && !homeVM.hasLocation) {
+      return AppStrings.gettingYourLocation;
+    }
+
+    if (trendsVM.isLoading) {
+      return homeVM.hasLocation
+          ? '${AppStrings.fetchingLatestTrendsFor} ${homeVM.currentLocation}...'
+          : AppStrings.fetchingLatestTrends;
+    }
+
+    return AppStrings.loading;
   }
 }
