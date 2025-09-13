@@ -52,7 +52,7 @@ class _HomeGreetingCardState extends State<HomeGreetingCard> {
                           style: TextStyle(color: AppColors.grey400),
                         ),
                         Text(
-                          '${vm.firstName}!',
+                          '${vm.firstName.trim()}!',
                           style: const TextStyle(
                               color: AppColors.darkBlueText,
                               fontSize: 20,
