@@ -28,6 +28,7 @@ class _TrendDetailsActionButtonsState extends State<TrendDetailsActionButtons> {
     try {
       final success = await viewModel.toggleTrendSaved(
         domain: widget.trendDetails.domain,
+        country: widget.trendDetails.country ?? '',
         rank: widget.trendDetails.rank,
         trendName: widget.trendDetails.trendName,
         noOfTweets: widget.trendDetails.noOfTweets,
@@ -83,9 +84,11 @@ class _TrendDetailsActionButtonsState extends State<TrendDetailsActionButtons> {
               size: 20,
             ),
             action: AppStrings.save,
-            onTap: () {
-              handleSaveAction(viewModel);
-            },
+            onTap: isProcessing
+                ? null
+                : () {
+                    handleSaveAction(viewModel);
+                  },
           ),
           const SizedBox(width: 10),
           ActionButton(
@@ -114,7 +117,7 @@ class ActionButton extends StatelessWidget {
 
   final Widget icon;
   final String action;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

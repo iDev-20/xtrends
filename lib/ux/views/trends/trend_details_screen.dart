@@ -29,6 +29,7 @@ class TrendDetailsScreen extends StatelessWidget {
             if (savedTrend != null) ...[
               TrendDetailsCard(
                 domain: savedTrend?.domain ?? '',
+                country: savedTrend?.country ?? '',
                 rank: savedTrend?.rank ?? 0,
                 trendName:
                     Utils.formatTrendName(trend: savedTrend?.trendName ?? ''),
@@ -43,6 +44,7 @@ class TrendDetailsScreen extends StatelessWidget {
                   final trend = viewModel.trends[index ?? 0];
                   return TrendDetailsCard(
                     domain: trend.domain,
+                    country: viewModel.currentTrendingResponse?.name,
                     rank: trend.rank,
                     trendName: Utils.formatTrendName(trend: trend.trendName),
                     noOfTweets:

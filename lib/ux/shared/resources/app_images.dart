@@ -37,6 +37,8 @@ class AppImages {
   static SvgPicture svgRankIcon = SvgPicture.asset('assets/svgs/rank_icon.svg');
   static SvgPicture svgStarIcon =
       SvgPicture.asset('assets/svgs/star_icon.svg', height: 24, width: 24);
+  static SvgPicture svglocationIcon =
+      SvgPicture.asset('assets/svgs/location_icon.svg');
 
   //bottom nav
   static SvgPicture svgUnselectedHomeIcon =

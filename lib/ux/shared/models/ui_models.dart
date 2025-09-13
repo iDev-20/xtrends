@@ -120,12 +120,26 @@ class TrendingResponse {
       trends: trendsList,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'status': status,
+      'message': message,
+      'trending': {
+        'name': name,
+        'placeID': placeId,
+        'locationType': locationType,
+        'trends': trends.map((trend) => trend.toJson()).toList(),
+      }
+    };
+  }
 }
 
 class SavedTrend {
   final String id;
   final String trendName;
   final String domain;
+  final String country;
   final int rank;
   final String noOfTweets;
   final String tweetWebUrl;
@@ -136,6 +150,7 @@ class SavedTrend {
     required this.id,
     required this.trendName,
     required this.domain,
+    required this.country,
     required this.rank,
     required this.noOfTweets,
     required this.tweetWebUrl,
@@ -148,6 +163,7 @@ class SavedTrend {
       id: json['id'] ?? '',
       trendName: json['trendName'] ?? '',
       domain: json['domain'] ?? '',
+      country: json['country'] ?? '',
       rank: json['rank'] ?? 0,
       noOfTweets: json['noOfTweets'] ?? '',
       tweetWebUrl: json['tweetWebUrl'] ?? '',
@@ -161,6 +177,7 @@ class SavedTrend {
     return {
       'id': id,
       'domain': domain,
+      'country': country,
       'rank': rank,
       'trendName': trendName,
       'noOfTweets': noOfTweets,
@@ -177,7 +194,7 @@ class SavedTrend {
   @override
   String toString() {
     return 'SavedTrend(id: $id, trendName: $trendName, domain: $domain, '
-        'rank: $rank, noOfTweets: $noOfTweets, '
+        'country: $country, rank: $rank, noOfTweets: $noOfTweets, '
         'tweetWebUrl: $tweetWebUrl, tweetMobileUrl: $tweetMobileUrl, '
         'savedAt: $savedAt)';
   }

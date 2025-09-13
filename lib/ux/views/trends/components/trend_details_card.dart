@@ -15,6 +15,7 @@ class TrendDetailsCard extends StatefulWidget {
     required this.tweetWebUrl,
     required this.tweetMobileUrl,
     this.savedAt,
+    this.country,
   });
 
   final String domain;
@@ -24,6 +25,7 @@ class TrendDetailsCard extends StatefulWidget {
   final String tweetWebUrl;
   final String tweetMobileUrl;
   final DateTime? savedAt;
+  final String? country;
 
   @override
   State<TrendDetailsCard> createState() => _TrendDetailsCardState();

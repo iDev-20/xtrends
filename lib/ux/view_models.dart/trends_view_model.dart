@@ -12,9 +12,11 @@ class TrendsViewModel extends ChangeNotifier {
 
   List<Trend> _trends = [];
   bool _loading = false;
+  TrendingResponse? _currentTrendingResponse;
 
   List<Trend> get trends => _trends;
   bool get isLoading => _loading;
+  TrendingResponse? get currentTrendingResponse => _currentTrendingResponse;
 
   Future<void> fetchTrends({String? country}) async {
     setLoadingState(true);
@@ -121,6 +123,23 @@ class TrendsViewModel extends ChangeNotifier {
     _trends =
         (cachedMap['trends'] as List).map((e) => Trend.fromJson(e)).toList();
 
+    debugPrint('Loaded ${_trends.length} cached trends');
+
+    if (cachedMap.containsKey('trendingResponse')) {
+      try {
+        _currentTrendingResponse =
+            TrendingResponse.fromJson(cachedMap['trendingResponse']);
+        debugPrint(
+            'Loaded cached trending response: ${_currentTrendingResponse?.name}');
+      } catch (e) {
+        debugPrint('Error loading cached trending response: $e');
+        _currentTrendingResponse = null;
+      }
+    } else {
+      debugPrint('No trendingResponse found in cached data');
+      _currentTrendingResponse = null;
+    }
+
     notifyListeners();
   }
 
@@ -192,6 +211,10 @@ class TrendsViewModel extends ChangeNotifier {
   Future<void> processFreshTrends(
       Map<String, dynamic> trendsData, String cacheKey) async {
     final trendingResponse = parseTrendsResponse(trendsData);
+
+    _currentTrendingResponse = trendingResponse;
+    debugPrint('Setting current trending response: ${trendingResponse.name}');
+
     updateTrendsData(trendingResponse.trends);
     await cacheFreshTrends(cacheKey);
 
@@ -226,10 +249,24 @@ class TrendsViewModel extends ChangeNotifier {
   }
 
   Map<String, dynamic> buildCacheData() {
-    return {
+    final cacheData = <String, dynamic>{
       'timestamp': DateTime.now().toIso8601String(),
       'trends': _trends.map((e) => e.toJson()).toList(),
     };
+
+    if (_currentTrendingResponse != null) {
+      try {
+        cacheData['trendingResponse'] = _currentTrendingResponse!.toJson();
+        debugPrint(
+            'Added trending response to cache: ${_currentTrendingResponse!.name}');
+      } catch (e) {
+        debugPrint('Error serializing trending response to cache: $e');
+      }
+    } else {
+      debugPrint('No trending response to cache');
+    }
+
+    return cacheData;
   }
 
   void handleFreshTrendsError(dynamic error) {

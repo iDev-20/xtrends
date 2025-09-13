@@ -4,6 +4,7 @@ import 'package:xtrends/ux/shared/components/app_material.dart';
 import 'package:xtrends/ux/shared/components/icon_box.dart';
 import 'package:xtrends/ux/shared/models/ui_models.dart';
 import 'package:xtrends/ux/shared/resources/app_colors.dart';
+import 'package:xtrends/ux/shared/resources/app_images.dart';
 import 'package:xtrends/ux/views/trends/trend_details_screen.dart';
 
 class SavedTrendCard extends StatelessWidget {
@@ -41,9 +42,16 @@ class SavedTrendCard extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.w600),
                     ),
-                    Text(
-                      'Trending in ${savedTrend.domain}',
-                      style: const TextStyle(color: AppColors.grey300),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        AppImages.svglocationIcon,
+                        const SizedBox(width: 2),
+                        Text(
+                          savedTrend.country,
+                          style: const TextStyle(color: AppColors.grey300),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -56,6 +56,7 @@ class SavedTrendsViewModel extends ChangeNotifier {
 
   Future<bool> saveTrend({
     required String domain,
+    required String country,
     required int rank,
     required String trendName,
     required String noOfTweets,
@@ -68,6 +69,7 @@ class SavedTrendsViewModel extends ChangeNotifier {
 
     final savedTrend = createSavedTrend(
       domain: domain,
+      country: country,
       rank: rank,
       trendName: trendName,
       noOfTweets: noOfTweets,
@@ -86,6 +88,7 @@ class SavedTrendsViewModel extends ChangeNotifier {
 
   SavedTrend createSavedTrend({
     required String domain,
+    required String country,
     required int rank,
     required String trendName,
     required String noOfTweets,
@@ -95,6 +98,7 @@ class SavedTrendsViewModel extends ChangeNotifier {
     return SavedTrend(
       id: SavedTrend.generateId(trendName, domain),
       domain: domain,
+      country: country,
       rank: rank,
       trendName: trendName,
       noOfTweets: noOfTweets,
@@ -158,6 +162,7 @@ class SavedTrendsViewModel extends ChangeNotifier {
 
   Future<bool> toggleTrendSaved({
     required String domain,
+    required String country,
     required int rank,
     required String trendName,
     required String noOfTweets,
@@ -169,6 +174,7 @@ class SavedTrendsViewModel extends ChangeNotifier {
     } else {
       return await saveTrend(
         domain: domain,
+        country: country,
         rank: rank,
         trendName: trendName,
         noOfTweets: noOfTweets,
