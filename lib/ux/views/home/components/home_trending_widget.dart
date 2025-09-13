@@ -11,7 +11,9 @@ import 'package:xtrends/ux/views/home/components/home_trends_card_shimmer.dart';
 import 'package:xtrends/ux/views/trends/trend_details_screen.dart';
 
 class HomeTrendingWidget extends StatelessWidget {
-  const HomeTrendingWidget({super.key});
+  const HomeTrendingWidget({super.key, required this.showShimmer});
+
+  final bool showShimmer;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class HomeTrendingWidget extends StatelessWidget {
             ),
           ),
           Consumer<TrendsViewModel>(builder: (context, vm, _) {
-            if (vm.isLoading) {
+            if (vm.isLoading || showShimmer) {
               return Column(
                 children: List.generate(
                   10,

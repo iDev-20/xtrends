@@ -59,7 +59,6 @@ class _TrendsScreenState extends State<TrendsScreen> {
     try {
       if (homeVM.hasLocation) {
         await trendsVM.refreshTrends(country: homeVM.currentLocation);
-        // return Future.value();
       }
     } catch (e) {
       debugPrint("Error during trends refresh: $e");

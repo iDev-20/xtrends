@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xtrends/ux/shared/components/app_page.dart';
@@ -18,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool initialLoadComplete = false;
+  bool isRefreshing = false;
 
   @override
   void initState() {
@@ -55,17 +58,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> onRefresh() async {
+    setState(() => isRefreshing = true);
     final homeVM = Provider.of<HomeViewModel>(context, listen: false);
     final trendsVM = Provider.of<TrendsViewModel>(context, listen: false);
 
     try {
-      await homeVM.refreshLocation();
+      // await homeVM.refreshLocation();
 
       if (homeVM.hasLocation) {
         await trendsVM.refreshTrends(country: homeVM.currentLocation);
       }
     } catch (e) {
       debugPrint("Error during refresh: $e");
+    } finally {
+      if (mounted) setState(() => isRefreshing = false);
     }
   }
 
@@ -77,7 +83,10 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, homeVM, trendsVM, _) {
           return RefreshIndicator(
             color: AppColors.grey250,
-            onRefresh: onRefresh,
+            onRefresh: () async {
+              onRefresh();
+              return Future.value();
+            },
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
@@ -92,11 +101,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildContent(HomeViewModel homeVM, TrendsViewModel trendsVM) {
-    if (!initialLoadComplete || shouldShowLoading(homeVM, trendsVM)) {
+    if (!initialLoadComplete ||
+        shouldShowLoading(homeVM, trendsVM) ||
+        homeVM.isHardRefresh) {
       return buildLoadingState(homeVM, trendsVM);
     }
 
-    return const HomeTrendingWidget();
+    return HomeTrendingWidget(
+      showShimmer: shouldShowShimmer(),
+    );
+  }
+
+  bool shouldShowShimmer() {
+    if (isRefreshing) {
+      return true;
+    }
+    return false;
   }
 
   bool shouldShowLoading(HomeViewModel homeVM, TrendsViewModel trendsVM) {
@@ -125,7 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String getLoadingMessage(HomeViewModel homeVM, TrendsViewModel trendsVM) {
-    if (homeVM.isLoadingLocation && !homeVM.hasLocation) {
+    if (homeVM.isLoadingLocation && !homeVM.hasLocation ||
+        homeVM.isHardRefresh) {
       return AppStrings.gettingYourLocation;
     }
 

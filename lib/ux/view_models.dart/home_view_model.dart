@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xtrends/ux/services/location_service.dart';
 import 'package:xtrends/ux/shared/resources/app_constants.dart';
+import 'package:xtrends/ux/view_models.dart/trends_view_model.dart';
 
 class HomeViewModel extends ChangeNotifier {
   HomeViewModel({required this.pref});
@@ -14,6 +15,7 @@ class HomeViewModel extends ChangeNotifier {
   String? _currentLocation;
   bool _loadingLocation = false;
   bool _isInitialLoad = true;
+  bool isHardRefresh = false;
 
   String? get currentLocation => _currentLocation;
   bool get isLoadingLocation => _loadingLocation;
@@ -173,5 +175,23 @@ class HomeViewModel extends ChangeNotifier {
       'cacheExpired': isCacheExpired(),
       'currenLocation': _currentLocation
     };
+  }
+
+  Future<void> onHardRefresh(TrendsViewModel viewModel) async {
+    if (isHardRefresh) return;
+    isHardRefresh = true;
+    notifyListeners();
+
+    try {
+      await refreshLocation();
+      if (hasLocation) {
+        await viewModel.refreshTrends(country: currentLocation);
+      }
+    } catch (e) {
+      debugPrint('Error during hard refresh $e');
+    } finally {
+      isHardRefresh = false;
+      notifyListeners();
+    }
   }
 }
